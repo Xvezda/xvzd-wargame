@@ -1,0 +1,17 @@
+version: '2'
+
+services:
+  xvzd:
+    image: xvzd:0.1
+    container_name: xvzd
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    environment:
+      - "FLASK_APP=/app/main.py"
+      - "FLASK_DEBUG=1"
+    volumes:
+      - ./app:/app
+    ports:
+      - "80:80"
+
