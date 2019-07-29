@@ -1,5 +1,5 @@
 /* Copyright (C) 2019 Xvezda <https://xvezda.com/> */
-div, button {
+div, button, .form-control, .btn {
     border-radius: 0 !important;
 }
 
