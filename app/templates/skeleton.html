@@ -1,12 +1,16 @@
+{% set xvzd_title = "Xvezda's shop" %}
 <!DOCTYPE html>
 <html>
   <head>
     {% include 'meta.html' %}
-    <title>{{ title|default("Xvezda's blog") }}</title>
+    <title>{{ title ~ ' - ' ~ xvzd_title|default(xvzd_title)|e }}</title>
     {% include 'styles.html' %}
   </head>
   <body>
-    <div id="main">
+    <div id="app" class="container">
+      {% include 'header.html' %}
+      {% include [current_page ~ '.html', 'error.html'] ignore missing %}
+      {% include 'footer.html' %}
     </div>
     {% include 'scripts.html' %}
   </body>

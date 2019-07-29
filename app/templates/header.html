@@ -1,0 +1,15 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="/">{{ xvzd_title|e }}</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      {% for page in pages %}
+      <li class="nav-item{% if current_page == page %} active{% endif %}">
+        <a class="nav-link" href="/{{ page|e }}">{{ page|e }}{% if current_page == page %} <span class="sr-only">(current)</span>{% endif %}</a>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+</nav>
