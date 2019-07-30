@@ -1,7 +1,6 @@
 #-*- coding: utf-8 -*-
 # Copyright (C) 2019 Xvezda <https://xvezda.com/>
 
-
 from flask_minify import minify
 
 from common.conf import create_app
@@ -19,3 +18,4 @@ app.register_blueprint(index_blueprint)
 if __name__ == "__main__":
   # Only for debugging while developing
   app.run(host='0.0.0.0', debug=True, port=8080)
+

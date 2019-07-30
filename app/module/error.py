@@ -19,7 +19,6 @@ def not_found(error):
   }
   return render_template('skeleton.html', **context), 400
 
-
 @error_blueprint.app_errorhandler(404)
 def not_found(error):
   context = {
@@ -28,7 +27,6 @@ def not_found(error):
     'pages': pages
   }
   return render_template('skeleton.html', **context), 404
-
 
 @error_blueprint.app_errorhandler(403)
 def not_allowed(error):

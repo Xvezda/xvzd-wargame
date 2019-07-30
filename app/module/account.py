@@ -1,7 +1,6 @@
 #-*- coding: utf-8 -*-
 # Copyright (C) 2019 Xvezda <https://xvezda.com/>
 
-
 from flask import Blueprint
 from flask import abort
 from flask import escape
