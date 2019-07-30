@@ -2,15 +2,16 @@
 # Copyright (C) 2019 Xvezda <https://xvezda.com/>
 
 
-from flask import request
-from flask import session
+from flask import Blueprint
+from flask import abort
+from flask import make_response
 from flask import redirect
 from flask import render_template
-from flask import make_response
-from flask import Blueprint
+from flask import request
+from flask import session
 
-from common.db import db_connect
 from common.conf import pages
+from common.db import db_connect
 from common.func import check_hack, csrf_token, crypt, giveme_flag
 
 
@@ -112,7 +113,7 @@ def join_check():
     user_name = request.form['user_name'].strip()[:0x80]
     user_pw = request.form['user_pw'].strip()[:0x80]
 
-    user_pw = hashlib.sha512(user_pw.encode('utf-8')).hexdigest()
+    user_pw = crypt(user_pw)
 
     try:
       cursor.execute('''
@@ -124,7 +125,19 @@ def join_check():
       """)
     conn.commit()
 
-    return 'join', 200
+    session['user_name'] = user_name
+
+    return redirect('/welcome', 302)
   else:
     return redirect('/', code=302)
+
+@account_blueprint.route('/welcome')
+def welcome():
+  context = {
+    'title': 'Welcome',
+    'current_page': 'welcome',
+    'pages': pages,
+    'user_name': session.get('user_name')
+  }
+  return render_template('skeleton.html', **context)
 
