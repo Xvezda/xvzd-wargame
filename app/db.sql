@@ -1,4 +1,3 @@
-declare @adminUid bigint;
 set @adminUid = 1;
 
 /* Create user */
