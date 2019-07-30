@@ -1,21 +1,28 @@
-from main import csrf_token
+#-*- coding: utf-8 -*-
+# Copyright (C) 2019 Xvezda <https://xvezda.com/>
+
 
 from flask import request
 from flask import session
 from flask import redirect
 from flask import render_template
+from flask import make_response
 from flask import Blueprint
 
-account = Blueprint('account', __name__)
+from common.db import db_connect
+from common.conf import pages
+from common.func import check_hack, csrf_token, crypt, giveme_flag
 
 
-@account.route('/logout')
+account_blueprint = Blueprint('account_blueprint', __name__)
+
+@account_blueprint.route('/logout')
 def logout():
   if session.get('is_logged'):
     session.clear()
   return redirect('/', code=302)
 
-@account.route('/login')
+@account_blueprint.route('/login')
 def login():
   context = {
     'title': 'Login',
@@ -26,8 +33,9 @@ def login():
 
   return render_template('skeleton.html', **context)
 
-@account.route('/login-check', methods=['GET', 'POST'])
+@account_blueprint.route('/login-check', methods=['GET', 'POST'])
 def login_check():
+  conn, cursor = db_connect()
   if request.method == 'POST':
     if any([
         'csrf_token' not in request.form,
@@ -53,7 +61,7 @@ def login_check():
     name = result[0] if result else None
     password = result[1] if result else None
 
-    pw_hash = hashlib.sha512(user_pw.encode('utf-8')).hexdigest()
+    pw_hash = crypt(user_pw)
     if password == pw_hash:
       session['is_logged'] = True
       session['user_id'] = user_id
@@ -63,13 +71,9 @@ def login_check():
         session['is_admin'] = True
 
       resp = make_response(redirect('/', code=302))
-      if session.get('is_admin', False):
-        # If admin
-        # NOTE: Admin will set flag here
-        resp.set_cookie('flag',
-                        os.getenv('WARGAME_FLAG', 'NO_FLAG'))
-      else:
-        resp.set_cookie('flag', 'admin_has_real_flag_here')
+
+      # NOTE: Admin will set flag here
+      resp.set_cookie('flag', giveme_flag())
       return resp
     else:
       return abort(400, """
@@ -78,7 +82,7 @@ def login_check():
   else:
     return redirect('/', code=302)
 
-@account.route('/join')
+@account_blueprint.route('/join')
 def join():
   context = {
     'title': 'Join',
@@ -89,8 +93,9 @@ def join():
 
   return render_template('skeleton.html', **context)
 
-@account.route('/join-check', methods=['GET', 'POST'])
+@account_blueprint.route('/join-check', methods=['GET', 'POST'])
 def join_check():
+  conn, cursor = db_connect()
   if request.method == 'POST':
     if any([
         'csrf_token' not in request.form,
