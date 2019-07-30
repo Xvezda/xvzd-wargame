@@ -2,4 +2,4 @@
 
 /usr/bin/mysqld_safe &
 sleep 3
-mysql -u root -pnoflaghere < db.sql
+mysql -u root -ppassword < db.sql

@@ -1,0 +1,9 @@
+/* Copyright (C) 2019 Xvezda <https://xvezda.com/> */
+div, button, .form-control, .btn {
+    border-radius: 0 !important;
+}
+
+button:focus, button:active {
+    outline: none !important;
+    box-shadow: none !important;
+}
