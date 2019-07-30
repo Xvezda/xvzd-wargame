@@ -2,22 +2,9 @@
 # Copyright (C) 2019 Xvezda <https://xvezda.com/>
 
 
-import re
-import os
-import hashlib
-import base64
-
-from flask import Flask
-from flask import abort
-from flask import make_response
-from flask import render_template, request, redirect, escape
-from flask import session
 from flask_minify import minify
-from flaskext.mysql import MySQL
 
-from common.conf import pages, create_app
-from common.db import mysql, db_setup
-from common.func import csrf_token, check_hack
+from common.conf import create_app
 from module.account import account_blueprint
 from module.error import error_blueprint
 from module.index import index_blueprint

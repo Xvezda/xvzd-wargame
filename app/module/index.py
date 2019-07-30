@@ -1,6 +1,9 @@
 #-*- coding: utf-8 -*-
 # Copyright (C) 2019 Xvezda <https://xvezda.com/>
 
+
+import os
+
 from flask import Blueprint
 from flask import abort
 from flask import render_template
@@ -8,6 +11,7 @@ from flask import send_from_directory
 
 from common.conf import pages
 from common.func import check_hack
+
 
 index_blueprint = Blueprint('index', __name__)
 
