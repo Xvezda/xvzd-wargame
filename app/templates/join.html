@@ -2,7 +2,7 @@
   <h1>Join page</h1>
   <div class="col-md-5">
     <div class="row">
-      <form action="/join-check" method="POST">
+      <form id="join" action="/join-check" method="POST">
         <input type="hidden" name="csrf_token" id="csrf_token" value="{{ session['csrf_token'] }}">
         <div class="form-group row">
           <label for="user_id" class="col-sm-2 col-form-label">ID</label>

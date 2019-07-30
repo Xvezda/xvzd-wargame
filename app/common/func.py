@@ -7,10 +7,11 @@ import hashlib
 import base64
 
 from flask import session
+from flask import request
 
 
 def giveme_flag():
-  if session.get('is_admin', False):
+  if session.get('is_admin', False) and request.remote_addr == '127.0.0.1':
     return os.getenv('WARGAME_FLAG', 'NO_FLAG')
   else:
     return 'admin_has_real_flag_here'
@@ -24,6 +25,10 @@ def check_hack(target):
   pattern = r'\.|\.\.|#|--|:|\\|//|`|\$|_|\*|\||' + \
             r'union|collation|proc|php|system'
   return bool(re.findall(pattern, target, re.I))
+
+
+def is_valid(pattern, target):
+  return bool(re.match(pattern, target))
 
 
 def crypt(pw):

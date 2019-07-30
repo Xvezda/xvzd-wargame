@@ -4,6 +4,7 @@
 
 from flask import Blueprint
 from flask import abort
+from flask import escape
 from flask import make_response
 from flask import redirect
 from flask import render_template
@@ -12,7 +13,7 @@ from flask import session
 
 from common.conf import pages
 from common.db import db_connect
-from common.func import check_hack, csrf_token, crypt, giveme_flag
+from common.func import check_hack, csrf_token, crypt, giveme_flag, is_valid
 
 
 account_blueprint = Blueprint('account_blueprint', __name__)
@@ -113,6 +114,20 @@ def join_check():
     user_name = request.form['user_name'].strip()[:0x80]
     user_pw = request.form['user_pw'].strip()[:0x80]
 
+    if check_hack(user_id+user_name+user_pw):
+      return abort(400, '')
+
+    if not all([is_valid(r'^[a-zA-Z0-9_-]+$', user_id),
+                is_valid(r'^[a-zA-Z0-9_-]+$', user_name),
+                is_valid(r'^[a-zA-Z0-9_-]+$', user_pw)]):
+      ref = request.referrer if request.referrer else '/'
+      return abort(400, """
+        <script>
+          alert('ID, NAME, PW should be alpha-numeric: [a-zA-Z0-9_-]');
+          location.href = '%s';
+        </script>
+      """ % (escape(ref)))
+
     user_pw = crypt(user_pw)
 
     try:
@@ -121,13 +136,16 @@ def join_check():
       ''', (user_id, user_name, user_pw))
     except:
       return abort(400, """
-        <script>alert('ID Already exists!');history.back();</script>
-      """)
+        <script>
+          alert('ID Already exists!');
+          location.href = '%s';
+        </script>
+      """ % (escape(ref)))
     conn.commit()
 
-    session['user_name'] = user_name
-
-    return redirect('/welcome', 302)
+    return """
+      <script>alert('Welcome %s!');location.href='/';</script>
+    """ % (escape(user_name))
   else:
     return redirect('/', code=302)
 
