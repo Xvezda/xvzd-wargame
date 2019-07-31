@@ -14,7 +14,8 @@ from flask import redirect
 
 
 def csrf_token():
-  return base64.b64encode(hashlib.md5(os.urandom(32)).hexdigest())
+  h = ''.join([hashlib.md5(os.urandom(0x80)).hexdigest() for _ in range(3)])
+  return base64.b64encode(h)
 
 def csrf_token_wrapper(original_func):
   @functools.wraps(original_func)
@@ -44,6 +45,17 @@ def check_hack(target):
 
 def is_valid(pattern, target):
   return bool(re.match(pattern, target))
+
+def form_validate_wrapper(require=[]):
+  def wrapper(original_func):
+    @functools.wraps(original_func)
+    def wrapper_func(*args, **kwargs):
+      if (not all(field in request.form for field in require)
+          or any(request.form.get(field) == '' for field in require)):
+        return abort(400, 'Something is missing!')
+      return original_func(*args, **kwargs)
+    return wrapper_func
+  return wrapper
 
 def crypt(pw):
   return hashlib.sha512(pw.encode('utf-8')).hexdigest()

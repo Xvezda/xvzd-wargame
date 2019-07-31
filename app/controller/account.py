@@ -27,19 +27,17 @@ def logout():
     session.clear()
   return resp
 
+
 @account_blueprint.route('/login')
 @security.csrf_token_wrapper
 def login():
   return render_template('login.html')
 
+
 @account_blueprint.route('/login-check', methods=['GET', 'POST'])
+@security.form_validate_wrapper(require=['user_id', 'user_pw'])
 @security.csrf_check_wrapper
 def login_check():
-  require = ['user_id', 'user_pw']
-  if not all(field in request.form for field in require) \
-      or any(request.form[field] == '' for field in request.form):
-    return abort(400, 'Something is missing!')
-
   user_id = request.form['user_id'].strip()
   user_pw = request.form['user_pw'].strip()
 
@@ -66,19 +64,17 @@ def login_check():
       <script>alert('ID, PW not match!');history.back();</script>
     """)
 
+
 @account_blueprint.route('/join')
 @security.csrf_token_wrapper
 def join():
   return render_template('join.html')
 
+
 @account_blueprint.route('/join-check', methods=['GET', 'POST'])
+@security.form_validate_wrapper(require=['user_id', 'user_name', 'user_pw'])
 @security.csrf_check_wrapper
 def join_check():
-  require = ['user_id', 'user_name', 'user_pw']
-  if not all(field in request.form for field in require) \
-      or any(request.form[field] == '' for field in request.form):
-    return abort(400, 'Something is missing!')
-
   user_id = request.form['user_id'].strip()[:0x80]
   user_name = request.form['user_name'].strip()[:0x80]
   user_pw = request.form['user_pw'].strip()[:0x80]
