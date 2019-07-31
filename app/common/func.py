@@ -7,7 +7,7 @@ from flask import request
 from flask import current_app
 
 
-def favicon_path():
+def static_path():
   return os.path.join(current_app.root_path, 'static')
 
 def giveme_flag():

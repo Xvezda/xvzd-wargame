@@ -6,7 +6,7 @@ from flask import render_template
 from flask import redirect
 from flask import send_from_directory
 
-from common.func import favicon_path
+from common.func import static_path
 
 
 index_blueprint = Blueprint('index', __name__)
@@ -14,7 +14,7 @@ index_blueprint = Blueprint('index', __name__)
 @index_blueprint.route('/favicon.ico')
 def favicon():
   return send_from_directory(
-    favicon_path(), 'favicon.ico', mimetype='image/vnd.microsoft.icon'
+    static_path(), 'favicon.ico', mimetype='image/vnd.microsoft.icon'
   )
 
 @index_blueprint.route('/')
