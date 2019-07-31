@@ -2,7 +2,8 @@
 # Copyright (C) 2019 Xvezda <https://xvezda.com/>
 
 from common.lib import security
-from model.base import select, select_all, insert
+from model.base import select, select_all
+from model.base import insert
 
 
 def get_user_info(fields, conds):
