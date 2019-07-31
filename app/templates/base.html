@@ -1,7 +1,7 @@
 {%- set endpoint = request.endpoint if request.endpoint else 'index.home' -%}
 {%- set current_page = endpoint.split('.')[-1] -%}
 {%- set brand = 'XVZD Shop' -%}
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
     {%- block meta -%}{% include 'meta.html' %}{%- endblock -%}

@@ -2,12 +2,11 @@
 # Copyright (C) 2019 Xvezda <https://xvezda.com/>
 
 from flask import Blueprint
-from flask import abort
 from flask import render_template
+from flask import redirect
 from flask import send_from_directory
 
-from common.conf import pages
-from common.func import check_hack, favicon_path
+from common.func import favicon_path
 
 
 index_blueprint = Blueprint('index', __name__)

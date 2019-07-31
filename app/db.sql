@@ -18,9 +18,9 @@ create table if not exists `xvzd_wargame`.`xvzd_users` (
 ) ENGINE=InnoDB;
 create table if not exists `xvzd_wargame`.`xvzd_notice` (
     `no` bigint not null auto_increment,
+    `uid` bigint not null,
     `title` varchar(128) not null,
     `content` text not null,
-    `uid` bigint not null,
     primary key (`no`)
 ) ENGINE=InnoDB;
 

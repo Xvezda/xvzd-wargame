@@ -1,0 +1,25 @@
+{% block board_list %}
+<div class="container">
+  <h1>{{ current_page|title }}</h1>
+  <table id="{{ current_page }}" class="table">
+    <thead>
+      <tr>
+        <th scope="col">no</th>
+        <th scope="col">title</th>
+        <th scope="col">author</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for data in datas %}
+      <tr>
+        <th scope="row">{{ data['article']['no'] }}</th>
+        {% if data['article']['uid'] == 1 %}<td><a href="#"><span class="text-danger font-weight-bold">{{ data['article']['title'] }}</span></a></td>{% else %}
+        <td><a href="#">{{ data['article']['title'] }}</a></td>
+        {% endif %}
+        <td>{{ data['user']['name'] }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

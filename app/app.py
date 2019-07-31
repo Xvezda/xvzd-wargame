@@ -14,8 +14,10 @@ app = create_app(__name__)
 
 app.register_blueprint(account_blueprint)
 app.register_blueprint(board_blueprint)
-app.register_blueprint(index_blueprint)
 app.register_blueprint(error_blueprint)
+app.register_blueprint(index_blueprint)
+
+#minify(app=app)
 
 if __name__ == "__main__":
   # Only for debugging while developing
