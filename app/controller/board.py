@@ -11,18 +11,18 @@ from flask import session
 
 from common.conf import *
 from common.lib import security
-from model.board import get_article
-from model.board import get_articles
+from model.board import get_article, get_articles
+from model.board import write_article
 from model.account import get_user_info
 
 
-boards = XVZD_BOARDS
+boards = XVZD_BOARDS__
 board_blueprint = Blueprint('board', __name__)
 
 
 @board_blueprint.route('/notice')
 def notice():
-  articles = get_articles('xvzd_notice')
+  articles = get_articles('notice')
   users = [get_user_info(['name'], {'uid': article['uid']})
            for article in articles]
   datas = [{'article': article, 'user': user}
@@ -37,7 +37,12 @@ def items():
 
 @board_blueprint.route('/support')
 def support():
-  return render_template('support.html')
+  articles = get_articles('support')
+  users = [get_user_info(['name'], {'uid': article['uid']})
+           for article in articles]
+  datas = [{'article': article, 'user': user}
+           for article, user in zip(articles, users)]
+  return render_template('support.html', datas=datas)
 
 
 @board_blueprint.route('/<board>/write')
@@ -66,7 +71,19 @@ def board_write_check(board):
   if (board == 'notice' and (session.get('user_id') != 'admin'
       or not session.get('is_admin') or request.remote_addr != '127.0.0.1')):
     return abort(400, '')
-  return 'write'
+
+  title = request.form['title']
+  content = request.form['content'].replace('\n', '<br>')
+  uid = get_user_info(['uid'], {'id': session.get('user_id')}).get('uid')
+
+  if security.check_hack(title, content):
+    return abort(400, '')
+
+  if not uid:
+    return abort(400, 'What the hell??')
+
+  write_article(board, title, content, uid)
+  return redirect('/'+board, code=302)
 
 
 @board_blueprint.route('/<board>/<int:no>')
@@ -74,7 +91,7 @@ def board_read(board, no):
   if (board not in boards or security.check_hack(board)
       or not security.is_valid(r'[a-zA-Z0-9_-]+', board)):
     return abort(400, '')
-  article = get_article(XVZD_PREFIX+board, no)
+  article = get_article(board, no)
   if not article:
     return abort(404)
-  return 'content: %s' % (article['content'])
+  return render_template('board_read.html', article=article)

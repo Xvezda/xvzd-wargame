@@ -22,9 +22,11 @@ def select(table, fields, conds):
     row[field] = column
   return row
 
-def select_all(table, fields):
+def select_all(table, fields, limit=10, order='asc'):
   conn, cursor = db_connect()
-  cursor.execute('select {} from {}'.format(', '.join(fields), table))
+  cursor.execute('select {} from {} order by 1 {} limit {}'.format(
+    ', '.join(fields), table, order, limit)
+  )
   result = cursor.fetchall()
   cursor.close()
 

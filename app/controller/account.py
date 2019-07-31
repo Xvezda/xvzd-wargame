@@ -41,7 +41,7 @@ def login_check():
   user_id = request.form['user_id'].strip()
   user_pw = request.form['user_pw'].strip()
 
-  if security.check_hack(user_id+user_pw):
+  if security.check_hack(user_id, user_pw):
     return abort(400, '')
 
   if validate_login(user_id, user_pw):
@@ -76,10 +76,10 @@ def join():
 @security.csrf_check_wrapper
 def join_check():
   user_id = request.form['user_id'].strip()[:0x80]
-  user_name = request.form['user_name'].strip()[:0x80]
+  user_name = request.form['user_name'].strip()[:0x20]
   user_pw = request.form['user_pw'].strip()[:0x80]
 
-  if security.check_hack(user_id+user_name+user_pw):
+  if security.check_hack(user_id, user_name, user_pw):
     return abort(400, '')
 
   ref = request.referrer if request.referrer else '/'

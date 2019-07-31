@@ -38,9 +38,11 @@ def csrf_check_wrapper(original_func):
     return original_func(*args, **kwargs)
   return wrapper_func
 
-def check_hack(target):
-  pattern = r'\.|\.\.|#|--|:|\\|//|`|@|\$|_|\*|\||' + \
-            r'0x|0b|x\'|b\'|union|collation|proc|php|system'
+def check_hack(*args):
+  pattern = r'\.\.|#|--|:|\\|//|`|@|_|\*|\||' + \
+            r'0x|0b|x\'|b\'|union|collation|proc|php|system|' + \
+            r'script|src|element|embed|frame|object'
+  target = ''.join([arg for arg in args])
   return bool(re.findall(pattern, target, re.I))
 
 def is_valid(pattern, target):

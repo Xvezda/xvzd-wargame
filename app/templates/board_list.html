@@ -15,17 +15,17 @@
           {% for data in datas %}
           <tr>
             <th scope="row">{{ data['article']['no'] }}</th>
-            {% if data['article']['uid'] == 1 %}<td><a href="/{{ current_page }}/{{ data['article']['no'] }}"><span class="text-danger font-weight-bold">{{ data['article']['title'] }}</span></a></td>{% else %}
-            <td><a href="/{{ current_page }}/{{ data['article']['no'] }}">{{ data['article']['title'] }}</a></td>
+            {% if data['article']['uid'] == 1 %}<td class="title"><a href="/{{ current_page }}/{{ data['article']['no'] }}"><span class="text-danger font-weight-bold">{{ data['article']['title'][:80] }}</span></a></td>{% else %}
+            <td class="title"><a href="/{{ current_page }}/{{ data['article']['no'] }}">{{ data['article']['title'][:80] }}</a></td>
             {% endif %}
-            <td>{{ data['user']['name'] }}</td>
+            <td>{{ data['user']['name'][:10] }}</td>
           </tr>
           {% endfor %}
         </tbody>
       </table>
     </div>
     <div class="row">
-      <a href="/{{ current_page }}/write" class="btn btn-default">Write</button>
+      <a href="/{{ current_page }}/write" class="btn btn-secondary">Write</a>
     </div>
   </div>
 </div>

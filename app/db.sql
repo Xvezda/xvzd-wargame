@@ -11,7 +11,7 @@ character set utf8mb4 collate utf8mb4_unicode_ci;
 create table if not exists `xvzd_wargame`.`xvzd_users` (
     `uid` bigint not null auto_increment,
     `id` varchar(128) not null,
-    `name` varchar(128) not null,
+    `name` varchar(32) not null,
     `password` varchar(128) not null,
     primary key (`uid`),
     unique (`id`)
@@ -21,8 +21,11 @@ create table if not exists `xvzd_wargame`.`xvzd_notice` (
     `uid` bigint not null,
     `title` varchar(128) not null,
     `content` text not null,
+    `regdate` timestamp not null default current_timestamp,
     primary key (`no`)
 ) ENGINE=InnoDB;
+create table if not exists `xvzd_wargame`.`xvzd_support`
+like `xvzd_wargame`.`xvzd_notice`;
 
 /* Insert datas */
 insert into `xvzd_wargame`.`xvzd_users` (id, name, password)
@@ -33,16 +36,24 @@ select * from (
            '42a556cb8530d509f970b765e88b9052d77192d520acbf562178fd5aeb808ad'
 ) as tmp where not exists (
     select `id` from `xvzd_wargame`.`xvzd_users` where id='admin'
-) limit 1;
+);
 
 insert into `xvzd_wargame`.`xvzd_notice` (title, content, uid)
 select * from (
     select '+++ THIS IS YOUR MAIN GOAL +++',
            'Admin checks every submits on support board.<br>'
-           'Make admin to submit support board with title "Hacked by <name>"'
-           ' and content with login cookie flag. <br><br>'
+           'Make admin to submit notice board with title "Hacked by '
+           "&lt;your_id_here&gt;\" and contents with admin's login cookie flag."
+           '<br><br>'
            '#JavaScript #XSS #CSRF #Bypass',
-           1
+           @adminUid union
+    select 'HINT FOR YOU',
+           '<a href="https://github.com/Xvezda/xvzd-wargame" target="_blank">'
+           'https://github.com/Xvezda/xvzd-wargame</a><br>'
+           'Here is all source code of this website :)<br><br>'
+           '+Tip)<br>'
+           'If you are not friendly with js, then use jQuery instead. :D',
+           @adminUid
 ) as tmp where not exists (
-    select * from `xvzd_wargame`.`xvzd_notice`
-) limit 1;
+    select no from `xvzd_wargame`.`xvzd_notice`
+);
