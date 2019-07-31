@@ -10,11 +10,13 @@ from flask import escape
 from flask import session
 
 from common.lib import security
+from common.conf import XVZD_PREFIX, XVZD_BOARDS
+from model.board import get_article
 from model.board import get_articles
 from model.account import get_user_info
 
 
-writable = ['notice', 'support']
+boards = XVZD_BOARDS
 board_blueprint = Blueprint('board', __name__)
 
 @board_blueprint.route('/notice')
@@ -35,16 +37,16 @@ def support():
   return render_template('support.html')
 
 @board_blueprint.route('/<board>/write')
+@security.csrf_token_wrapper
 def board_write(board):
-  if board not in writable:
+  if board not in boards:
     return abort(400, '')
-  session['csrf_token'] = security.csrf_token()
   return render_template('board_write.html', board=board)
 
 @board_blueprint.route('/<board>/write-check', methods=['GET', 'POST'])
 @security.csrf_check_wrapper
 def board_write_check(board):
-  if board not in writable:
+  if board not in boards:
     return abort(400, '')
 
   ref = request.referrer if request.referrer else '/'
@@ -66,3 +68,12 @@ def board_write_check(board):
     return abort(400, 'Something is missing!')
   return 'write'
 
+@board_blueprint.route('/<board>/<int:no>')
+def board_read(board, no):
+  if (board not in boards or security.check_hack(board)
+      or not security.is_valid(r'[a-zA-Z0-9_-]+', board)):
+    return abort(400, '')
+  article = get_article(XVZD_PREFIX+board, no)
+  if not article:
+    return abort(404)
+  return 'content: %s' % (article['content'])

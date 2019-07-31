@@ -11,9 +11,10 @@ from flask import request
 from flask import session
 
 from common.lib import security
-from common.conf import pages
 from common.func import giveme_flag
-from model.account import validate_login, insert_user, get_user_info
+from model.account import validate_login
+from model.account import insert_user
+from model.account import get_user_info
 
 
 account_blueprint = Blueprint('account_blueprint', __name__)
@@ -27,14 +28,8 @@ def logout():
   return resp
 
 @account_blueprint.route('/login')
+@security.csrf_token_wrapper
 def login():
-  context = {
-    'title': 'Login',
-    'current_page': 'login',
-    'pages': pages
-  }
-  session['csrf_token'] = security.csrf_token()
-
   return render_template('login.html')
 
 @account_blueprint.route('/login-check', methods=['GET', 'POST'])
@@ -72,14 +67,8 @@ def login_check():
     """)
 
 @account_blueprint.route('/join')
+@security.csrf_token_wrapper
 def join():
-  context = {
-    'title': 'Join',
-    'current_page': 'join',
-    'pages': pages
-  }
-  session['csrf_token'] = security.csrf_token()
-
   return render_template('join.html')
 
 @account_blueprint.route('/join-check', methods=['GET', 'POST'])

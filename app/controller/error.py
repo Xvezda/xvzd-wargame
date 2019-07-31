@@ -4,8 +4,6 @@
 from flask import Blueprint
 from flask import render_template
 
-from common.conf import pages
-
 
 error_blueprint = Blueprint('error', __name__)
 

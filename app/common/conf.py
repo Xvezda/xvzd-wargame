@@ -7,7 +7,8 @@ from flask import Flask
 from common.db import db_setup
 
 
-pages = ['notice', 'items', 'support']
+XVZD_PREFIX = 'xvzd_'
+XVZD_BOARDS = ['notice', 'support']
 
 def create_app(__name__=__name__):
   app = Flask(__name__)
