@@ -35,3 +35,14 @@ select * from (
     select `id` from `xvzd_wargame`.`xvzd_users` where id='admin'
 ) limit 1;
 
+insert into `xvzd_wargame`.`xvzd_notice` (title, content, uid)
+select * from (
+    select '+++ THIS IS YOUR MAIN GOAL +++',
+           'Admin checks every submits on support board.<br>'
+           'Make admin to submit support board with title "Hacked by <name>"'
+           ' and content with login cookie flag. <br><br>'
+           '#JavaScript #XSS #CSRF #Bypass',
+           1
+) as tmp where not exists (
+    select * from `xvzd_wargame`.`xvzd_notice`
+) limit 1;

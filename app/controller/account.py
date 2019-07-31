@@ -11,17 +11,19 @@ from flask import request
 from flask import session
 
 from common.conf import pages
-from common.db import db_connect
 from common.func import check_hack, csrf_token, crypt, giveme_flag, is_valid
+from model.account import validate_login, insert_user, get_user_info
 
 
 account_blueprint = Blueprint('account_blueprint', __name__)
 
 @account_blueprint.route('/logout')
 def logout():
+  resp = make_response(redirect('/', code=302))
+  resp.set_cookie('flag', '', expires=0)
   if session.get('is_logged'):
     session.clear()
-  return redirect('/', code=302)
+  return resp
 
 @account_blueprint.route('/login')
 def login():
@@ -32,21 +34,20 @@ def login():
   }
   session['csrf_token'] = csrf_token()
 
-  return render_template('skeleton.html', **context)
+  return render_template('login.html')
 
 @account_blueprint.route('/login-check', methods=['GET', 'POST'])
 def login_check():
-  conn, cursor = db_connect()
   if request.method == 'POST':
-    if any([
-        'csrf_token' not in request.form,
-        'csrf_token' not in session,
-        request.form.get('csrf_token') != session.get('csrf_token')]):
+    if 'csrf_token' not in request.form \
+        or 'csrf_token' not in session \
+        or request.form.get('csrf_token') != session.get('csrf_token'):
       return abort(400, 'CSRF Attack Detected!')
     session.pop('csrf_token')
 
     require = ['user_id', 'user_pw']
-    if not all(field in request.form for field in require):
+    if not all(field in request.form for field in require) \
+        or any(request.form[field] == '' for field in request.form):
       return abort(400, 'Something is missing!')
 
     user_id = request.form['user_id'].strip()
@@ -55,20 +56,14 @@ def login_check():
     if check_hack(user_id+user_pw):
       return abort(400, '')
 
-    cursor.execute('select name, password from xvzd_users where id = %s',
-                   (user_id))
-
-    result = cursor.fetchone()
-    name = result[0] if result else None
-    password = result[1] if result else None
-
-    pw_hash = crypt(user_pw)
-    if password == pw_hash:
+    if validate_login(user_id, user_pw):
       session['is_logged'] = True
       session['user_id'] = user_id
+
+      name = get_user_info(['name'], {'id': user_id}).get('name')
       session['user_name'] = name
 
-      if user_id == 'admin':
+      if user_id == 'admin' and request.remote_addr == '127.0.0.1':
         session['is_admin'] = True
 
       resp = make_response(redirect('/', code=302))
@@ -92,21 +87,20 @@ def join():
   }
   session['csrf_token'] = csrf_token()
 
-  return render_template('skeleton.html', **context)
+  return render_template('join.html')
 
 @account_blueprint.route('/join-check', methods=['GET', 'POST'])
 def join_check():
-  conn, cursor = db_connect()
   if request.method == 'POST':
-    if any([
-        'csrf_token' not in request.form,
-        'csrf_token' not in session,
-        request.form.get('csrf_token') != session.get('csrf_token')]):
+    if 'csrf_token' not in request.form \
+        or 'csrf_token' not in session \
+        or request.form.get('csrf_token') != session.get('csrf_token'):
       return abort(400, 'CSRF Attack Detected!')
     session.pop('csrf_token')
 
     require = ['user_id', 'user_name', 'user_pw']
-    if not all(field in request.form for field in require):
+    if not all(field in request.form for field in require) \
+        or any(request.form[field] == '' for field in request.form):
       return abort(400, 'Something is missing!')
 
     user_id = request.form['user_id'].strip()[:0x80]
@@ -116,10 +110,9 @@ def join_check():
     if check_hack(user_id+user_name+user_pw):
       return abort(400, '')
 
-    if not all([is_valid(r'^[a-zA-Z0-9_-]+$', user_id),
-                is_valid(r'^[a-zA-Z0-9_-]+$', user_name),
-                is_valid(r'^[a-zA-Z0-9_-]+$', user_pw)]):
-      ref = request.referrer if request.referrer else '/'
+    ref = request.referrer if request.referrer else '/'
+    if not all(is_valid(r'^[a-zA-Z0-9_-]+$', item)
+               for item in [user_id, user_name, user_pw]):
       return abort(400, """
         <script>
           alert('ID, NAME, PW should be alpha-numeric: [a-zA-Z0-9_-]');
@@ -130,9 +123,7 @@ def join_check():
     user_pw = crypt(user_pw)
 
     try:
-      cursor.execute('''
-        insert into xvzd_users (id, name, password) values (%s, %s, %s)
-      ''', (user_id, user_name, user_pw))
+      insert_user(user_id, user_name, user_pw)
     except:
       return abort(400, """
         <script>
@@ -140,21 +131,10 @@ def join_check():
           location.href = '%s';
         </script>
       """ % (escape(ref)))
-    conn.commit()
 
     return """
       <script>alert('Welcome %s!');location.href='/';</script>
     """ % (escape(user_name))
   else:
     return redirect('/', code=302)
-
-@account_blueprint.route('/welcome')
-def welcome():
-  context = {
-    'title': 'Welcome',
-    'current_page': 'welcome',
-    'pages': pages,
-    'user_name': session.get('user_name')
-  }
-  return render_template('skeleton.html', **context)
 

@@ -17,3 +17,4 @@ def db_connect():
   conn = mysql.connect()
   cursor = conn.cursor()
   return (conn, cursor)
+

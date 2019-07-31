@@ -1,0 +1,19 @@
+{%- set endpoint = request.endpoint if request.endpoint else 'index.home' -%}
+{%- set current_page = endpoint.split('.')[-1] -%}
+{%- set brand = 'XVZD Shop' -%}
+<!DOCTYPE html>
+<html>
+  <head>
+    {%- block meta -%}{% include 'meta.html' %}{%- endblock -%}
+      <title>{% block title -%}{{ current_page|title }} - Xvezda's shop{%- endblock %}</title>
+    {%- block styles -%}{% include 'styles.html' %}{%- endblock -%}
+  </head>
+  <body>
+    <div id="app">
+      {%- block header -%}{% include 'header.html' %}{%- endblock -%}
+      {%- block content -%}{%- endblock -%}
+      {%- block footer -%}{% include 'footer.html' %}{%- endblock -%}
+    </div>
+    {%- block scripts -%}{% include 'scripts.html' %}{%- endblock -%}
+  </body>
+</html>

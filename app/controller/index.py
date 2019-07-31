@@ -14,24 +14,15 @@ index_blueprint = Blueprint('index', __name__)
 
 @index_blueprint.route('/favicon.ico')
 def favicon():
-  return favicon_path()
   return send_from_directory(
     favicon_path(), 'favicon.ico', mimetype='image/vnd.microsoft.icon'
   )
 
+@index_blueprint.route('/')
+def main():
+  return render_template('home.html')
+
 @index_blueprint.route('/home')
 def redir_home():
   return redirect('/', code=302)
-
-@index_blueprint.route('/')
-@index_blueprint.route('/<page>')
-def main(page='home'):
-  if check_hack(page):
-    return abort(400, '')
-  context = {
-    'title': page.title(),
-    'current_page': page,
-    'pages': pages
-  }
-  return render_template('skeleton.html', **context)
 

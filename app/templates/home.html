@@ -1,5 +1,20 @@
-<div class="jumbotron">
-</div>
+{% extends 'base.html' %}
+
+{% block styles %}
+{% include 'styles.html' %}
+{% endblock %}
+
+{% block header %}
+{% include 'header.html' %}
+{% endblock %}
+
+{% block content %}
 <div class="container">
-  <h1>Hello :D</h1>
+  <div class="jumbotron">
+    <h1>Placeholder</h1>
+  </div>
+  <div class="container">
+    <h1>Hello :D</h1>
+  </div>
 </div>
+{% endblock %}
