@@ -5,6 +5,7 @@ import functools
 
 from flask import abort
 from flask import request
+from flaskext.mysql import *
 
 
 def db_error_wrapper(original_func):
@@ -12,7 +13,9 @@ def db_error_wrapper(original_func):
   def wrapper_func(*args, **kwargs):
     try:
       ret = original_func(*args, **kwargs)
-    except:
+    except pymysql.InternalError:
+    #except pymysql.OperationalError:
       return abort(503, 'Looks like db server is dead.')
     return ret
+    #return original_func(*args, **kwargs)
   return wrapper_func

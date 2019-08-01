@@ -108,6 +108,6 @@ def join_check():
     """ % (escape(ref)))
 
   return """
-    <script>alert('Welcome %s!');location.href='/';</script>
+    <script>alert('Welcome %s!');location.href='/login';</script>
   """ % (escape(user_name))
 

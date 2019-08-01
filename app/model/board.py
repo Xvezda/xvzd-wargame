@@ -10,7 +10,7 @@ from model.base import insert
 
 def get_articles(board):
   order = 'desc'
-  fields = ['no', 'title', 'uid']
+  fields = ['no', 'title', 'uid', 'pinned']
   return select_all(XVZD_PREFIX__+board, fields, order=order)
 
 def get_article(board, no):

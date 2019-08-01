@@ -1,3 +1,4 @@
+{% set pinned = filter %}
 {% block board_list %}
 <div class="container">
   <div class="col">
@@ -12,12 +13,22 @@
           </tr>
         </thead>
         <tbody>
+          <!-- pinned -->
+          {% for data in datas %}
+          {% if data['article']['pinned'] %}
+          <tr>
+            <th scope="row" title="pinned"><i class="material-icons md-18">verified_user</i></th>
+            <!--<th scope="row">{{ data['article']['no'] }}</th>-->
+            <td class="title"><a href="/{{ current_page }}/{{ data['article']['no'] }}"><span class="text-danger font-weight-bold">{{ data['article']['title'][:80] }}</span></a>
+            <td>{{ data['user']['name'][:10] }}</td>
+          </tr>
+          {% endif %}
+          {% endfor %}
+          <!-- /pinned -->
           {% for data in datas %}
           <tr>
             <th scope="row">{{ data['article']['no'] }}</th>
-            {% if data['article']['uid'] == 1 %}<td class="title"><a href="/{{ current_page }}/{{ data['article']['no'] }}"><span class="text-danger font-weight-bold">{{ data['article']['title'][:80] }}</span></a></td>{% else %}
             <td class="title"><a href="/{{ current_page }}/{{ data['article']['no'] }}">{{ data['article']['title'][:80] }}</a></td>
-            {% endif %}
             <td>{{ data['user']['name'][:10] }}</td>
           </tr>
           {% endfor %}

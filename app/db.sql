@@ -19,6 +19,7 @@ create table if not exists `xvzd_wargame`.`xvzd_users` (
 create table if not exists `xvzd_wargame`.`xvzd_notice` (
     `no` bigint not null auto_increment,
     `uid` bigint not null,
+    `pinned` tinyint(1),
     `title` varchar(128) not null,
     `content` text not null,
     `regdate` timestamp not null default current_timestamp,
@@ -38,16 +39,18 @@ select * from (
     select `id` from `xvzd_wargame`.`xvzd_users` where id='admin'
 );
 
-insert into `xvzd_wargame`.`xvzd_notice` (title, content, uid)
+insert into `xvzd_wargame`.`xvzd_notice` (pinned, title, content, uid)
 select * from (
-    select '+++ THIS IS YOUR MAIN GOAL +++',
+    select 1,
+           '+++ THIS IS YOUR MAIN GOAL +++',
            'Admin checks every submits on support board.<br>'
-           'Make admin to submit notice board with title "Hacked by '
+           'Make admin to submit on notice board with title "Hacked by '
            "&lt;your_id_here&gt;\" and contents with admin's login cookie flag."
            '<br><br>'
            '#JavaScript #XSS #CSRF #Bypass',
            @adminUid union
-    select 'HINT FOR YOU',
+    select 0,
+           'HINT FOR YOU',
            '<a href="https://github.com/Xvezda/xvzd-wargame" target="_blank">'
            'https://github.com/Xvezda/xvzd-wargame</a><br>'
            'Here is all source code of this website :)<br><br>'

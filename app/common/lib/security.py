@@ -39,7 +39,7 @@ def csrf_check_wrapper(original_func):
   return wrapper_func
 
 def check_hack(*args):
-  pattern = r'\.\.|#|--|:|\\|//|`|@|_|\*|\||' + \
+  pattern = r'\.\.|#|--|\\|//|`|_|\*|\||' + \
             r'0x|0b|x\'|b\'|union|collation|proc|php|system|' + \
             r'script|src|element|embed|frame|object'
   target = ''.join([arg for arg in args])

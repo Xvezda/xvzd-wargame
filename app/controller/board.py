@@ -92,6 +92,7 @@ def board_write_check(board):
 
 
 @board_blueprint.route('/<board>/<int:no>')
+@handler.db_error_wrapper
 def board_read(board, no):
   if (board not in boards or security.check_hack(board)
       or not security.is_valid(r'[a-zA-Z0-9_-]+', board)):
