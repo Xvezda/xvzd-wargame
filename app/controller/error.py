@@ -19,3 +19,7 @@ def not_allowed(error):
 def not_found(error):
   return render_template('404.html', error=error), 404
 
+@error_blueprint.app_errorhandler(503)
+def service_unavailable(error):
+  return render_template('503.html', error=error), 503
+

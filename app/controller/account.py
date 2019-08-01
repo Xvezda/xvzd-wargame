@@ -10,6 +10,7 @@ from flask import render_template
 from flask import request
 from flask import session
 
+from common.lib import handler
 from common.lib import security
 from common.func import giveme_flag
 from model.account import validate_login
@@ -35,6 +36,7 @@ def login():
 
 
 @account_blueprint.route('/login-check', methods=['GET', 'POST'])
+@handler.db_error_wrapper
 @security.form_validate_wrapper(require=['user_id', 'user_pw'])
 @security.csrf_check_wrapper
 def login_check():
@@ -72,6 +74,7 @@ def join():
 
 
 @account_blueprint.route('/join-check', methods=['GET', 'POST'])
+@handler.db_error_wrapper
 @security.form_validate_wrapper(require=['user_id', 'user_name', 'user_pw'])
 @security.csrf_check_wrapper
 def join_check():

@@ -10,6 +10,7 @@ from flask import escape
 from flask import session
 
 from common.conf import *
+from common.lib import handler
 from common.lib import security
 from model.board import get_article, get_articles
 from model.board import write_article
@@ -21,6 +22,7 @@ board_blueprint = Blueprint('board', __name__)
 
 
 @board_blueprint.route('/notice')
+@handler.db_error_wrapper
 def notice():
   articles = get_articles('notice')
   users = [get_user_info(['name'], {'uid': article['uid']})
@@ -36,6 +38,7 @@ def items():
 
 
 @board_blueprint.route('/support')
+@handler.db_error_wrapper
 def support():
   articles = get_articles('support')
   users = [get_user_info(['name'], {'uid': article['uid']})
@@ -54,6 +57,7 @@ def board_write(board):
 
 
 @board_blueprint.route('/<board>/write-check', methods=['GET', 'POST'])
+@handler.db_error_wrapper
 @security.form_validate_wrapper(require=['title', 'content'])
 @security.csrf_check_wrapper
 def board_write_check(board):
@@ -83,6 +87,7 @@ def board_write_check(board):
     return abort(400, 'What the hell??')
 
   write_article(board, title, content, uid)
+
   return redirect('/'+board, code=302)
 
 
