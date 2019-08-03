@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
 
+{%- block title -%}
+{{ error }}
+{%- endblock -%}
+
 {%- block content -%}
 <div class="container">
   <h1>{{ error.description|default('NO HACK! >:(', true)|safe }}</h1>

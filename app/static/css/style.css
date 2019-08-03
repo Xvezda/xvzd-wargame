@@ -8,6 +8,14 @@ button:focus, button:active {
     box-shadow: none !important;
 }
 
+.table .pinned {
+    background: url(/static/img/icons8-pin-48.png);
+    background-size: 100%;
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+}
+
 .material-icons.md-18 { font-size: 18px; }
 .material-icons.md-24 { font-size: 24px; }
 .material-icons.md-36 { font-size: 36px; }

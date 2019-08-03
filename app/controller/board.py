@@ -12,24 +12,24 @@ from flask import session
 from common.conf import *
 from common.lib import handler
 from common.lib import security
-from model.board import get_article, get_articles
-from model.board import write_article
+from model.board import get_article, write_article
 from model.account import get_user_info
+
+import model.board as mboard
+import model.account as maccount
 
 
 boards = XVZD_BOARDS__
 board_blueprint = Blueprint('board', __name__)
 
+context = {}
+context['mboard'] = mboard
+context['maccount'] = maccount
 
 @board_blueprint.route('/notice')
 @handler.db_error_wrapper
 def notice():
-  articles = get_articles('notice')
-  users = [get_user_info(['name'], {'uid': article['uid']})
-           for article in articles]
-  datas = [{'article': article, 'user': user}
-           for article, user in zip(articles, users)]
-  return render_template('notice.html', datas=datas)
+  return render_template('notice.html', **context)
 
 
 @board_blueprint.route('/items')
@@ -40,12 +40,7 @@ def items():
 @board_blueprint.route('/support')
 @handler.db_error_wrapper
 def support():
-  articles = get_articles('support')
-  users = [get_user_info(['name'], {'uid': article['uid']})
-           for article in articles]
-  datas = [{'article': article, 'user': user}
-           for article, user in zip(articles, users)]
-  return render_template('support.html', datas=datas)
+  return render_template('support.html', **context)
 
 
 @board_blueprint.route('/<board>/write')
@@ -100,4 +95,13 @@ def board_read(board, no):
   article = get_article(board, no)
   if not article:
     return abort(404)
-  return render_template('board_read.html', article=article)
+
+  # Check permission on support board
+  if board == 'support':
+    if not article.get('pinned'):
+      if not session.get('is_logged'):
+        return abort(403, 'You are not logged in!')
+      if not session.get('is_admin') and request.remote_addr != '127.0.0.1':
+        return abort(403, 'You are not admin!')
+
+  return render_template('board_read.html', article=article, board=board)

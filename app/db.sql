@@ -48,8 +48,14 @@ select * from (
            "&lt;your_id_here&gt;\" and contents with admin's login cookie flag."
            '<br><br>'
            '#JavaScript #XSS #CSRF #Bypass',
-           @adminUid union
-    select 0,
+           @adminUid
+) as tmp where not exists (
+    select no from `xvzd_wargame`.`xvzd_notice`
+);
+
+insert into `xvzd_wargame`.`xvzd_support` (pinned, title, content, uid)
+select * from (
+    select 1,
            'HINT FOR YOU',
            '<a href="https://github.com/Xvezda/xvzd-wargame" target="_blank">'
            'https://github.com/Xvezda/xvzd-wargame</a><br>'
@@ -58,5 +64,6 @@ select * from (
            'If you are not friendly with js, then use jQuery instead. :D',
            @adminUid
 ) as tmp where not exists (
-    select no from `xvzd_wargame`.`xvzd_notice`
+    select no from `xvzd_wargame`.`xvzd_support`
 );
+

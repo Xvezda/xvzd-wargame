@@ -22,11 +22,15 @@ def select(table, fields, conds):
     row[field] = column
   return row
 
-def select_all(table, fields, limit=10, order='asc'):
+def select_all(table, fields, conds={}, limit=10, order='asc'):
   conn, cursor = db_connect()
-  cursor.execute('select {} from {} order by 1 {} limit {}'.format(
-    ', '.join(fields), table, order, limit)
-  )
+  cursor.execute('select {} from {} {} order by 1 {} limit {}'.format(
+    ', '.join(fields), table,
+    'where ' + ' and '.join([
+      '{} = %s'.format(field) for field, _ in conds.iteritems()
+    ]) if conds else '',
+    order, limit
+  ), *conds.values())
   result = cursor.fetchall()
   cursor.close()
 
