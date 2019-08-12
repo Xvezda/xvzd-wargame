@@ -11,7 +11,7 @@
       <h1>{{ article['title'] }}</h1>
     </div>
     <div class="row">
-      <article>{{ article['content']|safe }}</article>
+      <article id="article">{{ article['content']|safe }}</article>
     </div>
     <div class="row text-right">
       <a href="/{{ board }}" class="btn btn-secondary">Back</a>

@@ -59,7 +59,7 @@ def board_write_check(board):
   if board not in boards:
     return abort(400, '')
 
-  if 'user_id' not in session or not session.get('is_logged'):
+  if not session.get('is_logged'):
     return abort(400, """
       <script>
         alert('You are not logged in!');
@@ -73,6 +73,9 @@ def board_write_check(board):
 
   title = request.form['title']
   content = request.form['content'].replace('\n', '<br>')
+  # Let's limit length to 128
+  if len(content) >= 0x80:
+    return abort(400, 'Max length of content limited to 128 bytes!')
   uid = get_user_info(['uid'], {'id': session.get('user_id')}).get('uid')
 
   if security.check_hack(title, content):
@@ -99,9 +102,12 @@ def board_read(board, no):
   # Check permission on support board
   if board == 'support':
     if not article.get('pinned'):
+      user_id = get_user_info(['id'], {'uid': article.get('uid')}).get('id')
+      is_writer = (session.get('user_id') == user_id)
       if not session.get('is_logged'):
         return abort(403, 'You are not logged in!')
-      if not session.get('is_admin') and request.remote_addr != '127.0.0.1':
+      if (not session.get('is_admin') and request.remote_addr != '127.0.0.1'
+          and not is_writer):
         return abort(403, 'You are not admin!')
 
   return render_template('board_read.html', article=article, board=board)

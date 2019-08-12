@@ -16,7 +16,7 @@ def check_article():
   driver.find_element_by_name('user_id').send_keys('admin')
   driver.find_element_by_name('user_pw').send_keys('noflaghere')
   driver.find_element_by_id('login').submit()
-  print driver.page_source
+  #print driver.page_source
   driver.get('http://localhost/support/8')
-  print driver.page_source
+  #print driver.page_source
   driver.close()

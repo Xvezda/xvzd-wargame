@@ -13,6 +13,7 @@ create table if not exists `xvzd_wargame`.`xvzd_users` (
     `id` varchar(128) not null,
     `name` varchar(32) not null,
     `password` varchar(128) not null,
+    `ip` varchar(64) not null,
     primary key (`uid`),
     unique (`id`)
 ) ENGINE=InnoDB;
@@ -23,6 +24,7 @@ create table if not exists `xvzd_wargame`.`xvzd_notice` (
     `title` varchar(128) not null,
     `content` text not null,
     `regdate` timestamp not null default current_timestamp,
+    `ip` varchar(64) not null,
     primary key (`no`)
 ) ENGINE=InnoDB;
 create table if not exists `xvzd_wargame`.`xvzd_support`
@@ -60,8 +62,9 @@ select * from (
            '<a href="https://github.com/Xvezda/xvzd-wargame" target="_blank">'
            'https://github.com/Xvezda/xvzd-wargame</a><br>'
            'Here is all source code of this website :)<br><br>'
-           '+Tip)<br>'
-           'If you are not friendly with js, then use jQuery instead. :D',
+           '<span class="text-muted">+Tip)<br>'
+           'If you are not friendly with js, then use jQuery instead. :D'
+           '</span>',
            @adminUid
 ) as tmp where not exists (
     select no from `xvzd_wargame`.`xvzd_support`

@@ -39,9 +39,12 @@ def csrf_check_wrapper(original_func):
   return wrapper_func
 
 def check_hack(*args):
-  pattern = r'\.\.|#|--|\\|//|`|_|\*|\||' + \
-            r'0x|0b|x\'|b\'|union|collation|proc|php|system|' + \
-            r'script|src|element|embed|frame|object'
+  # Blacklist pattern
+  pattern = r'\.|\.\.|\$|\+|#|--|\\|`|_|\*|\||;|:|[box][\'"]|0[bx]|'  + \
+            r'union|collation|proc|php|py|sys|style|import|select|'   + \
+            r'script|src|embed|frame|object|esc|uri|eval|loc|limit|'  + \
+            r'meta|input|form|html|head|body|button|table|glob|cast|' + \
+            r'schema|ord|mid|column|group|dump|var|dev|root|conv|base'
   target = ''.join([arg for arg in args])
   return bool(re.findall(pattern, target, re.I))
 
@@ -61,5 +64,4 @@ def form_validate_wrapper(require=[]):
 
 def crypt(pw):
   return hashlib.sha512(pw.encode('utf-8')).hexdigest()
-
 
