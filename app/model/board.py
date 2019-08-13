@@ -23,7 +23,7 @@ def get_article(board, no):
   fields = ['no', 'title', 'content', 'uid', 'regdate', 'pinned']
   return select(XVZD_PREFIX__+board, fields, {'no': no})
 
-def write_article(board, title, content, uid):
+def write_article(board, title, content, uid, ip):
   insert(XVZD_PREFIX__+board,
-         ['title', 'content', 'uid', 'regdate'],
-         [title, content, uid, time.strftime('%Y-%m-%d %H:%M:%S')])
+         ['title', 'content', 'uid', 'ip', 'regdate'],
+         [title, content, uid, ip, time.strftime('%Y-%m-%d %H:%M:%S')])

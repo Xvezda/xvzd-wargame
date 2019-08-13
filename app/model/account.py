@@ -14,10 +14,10 @@ def get_users():
   fields = ['uid', 'id', 'name', 'password']
   return select_all(XVZD_PREFIX__+'users', fields)
 
-def insert_user(user_id, user_name, user_pw):
+def insert_user(user_id, user_name, user_pw, ip):
   insert(XVZD_PREFIX__+'users',
-          ['id', 'name', 'password'],
-          [user_id, user_name, user_pw])
+          ['id', 'name', 'password', 'ip'],
+          [user_id, user_name, user_pw, ip])
 
 def validate_login(user_id, user_pw):
   result = get_user_info(['password'], {'id': user_id})

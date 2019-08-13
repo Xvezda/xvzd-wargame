@@ -23,8 +23,8 @@ account_blueprint = Blueprint('account_blueprint', __name__)
 @account_blueprint.route('/logout')
 def logout():
   resp = make_response(redirect('/', code=302))
-  resp.set_cookie('flag', '', expires=0)
   if session.get('is_logged'):
+    resp.set_cookie('flag', '', expires=0)
     session.clear()
   return resp
 
@@ -96,9 +96,10 @@ def join_check():
     """ % (escape(ref)))
 
   user_pw = security.crypt(user_pw)
+  ip = request.remote_addr
 
   try:
-    insert_user(user_id, user_name, user_pw)
+    insert_user(user_id, user_name, user_pw, ip)
   except:
     return abort(400, """
       <script>

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 
 /usr/bin/mysqld_safe &
-sleep 3
+sleep 5
 mysql -u root -ppassword < db.sql

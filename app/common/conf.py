@@ -8,7 +8,7 @@ from common.db import db_setup
 
 
 XVZD_PREFIX__ = 'xvzd_'
-XVZD_BOARDS__ = ['notice', 'support']
+XVZD_BOARDS__ = ['notice', 'qna', 'forum']
 
 def create_app(__name__=__name__):
   app = Flask(__name__)

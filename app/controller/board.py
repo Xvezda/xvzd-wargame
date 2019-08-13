@@ -26,21 +26,33 @@ context = {}
 context['mboard'] = mboard
 context['maccount'] = maccount
 
+@board_blueprint.route('/about')
+@handler.db_error_wrapper
+def about():
+  return render_template('about.html', **context)
+
+
 @board_blueprint.route('/notice')
 @handler.db_error_wrapper
 def notice():
   return render_template('notice.html', **context)
 
 
-@board_blueprint.route('/items')
-def items():
-  return render_template('items.html')
+@board_blueprint.route('/pricing')
+def pricing():
+  return render_template('pricing.html', **context)
 
 
-@board_blueprint.route('/support')
+@board_blueprint.route('/qna')
 @handler.db_error_wrapper
-def support():
-  return render_template('support.html', **context)
+def qna():
+  return render_template('qna.html', **context)
+
+
+@board_blueprint.route('/forum')
+@handler.db_error_wrapper
+def forum():
+  return render_template('forum.html', **context)
 
 
 @board_blueprint.route('/<board>/write')
@@ -84,7 +96,8 @@ def board_write_check(board):
   if not uid:
     return abort(400, 'What the hell??')
 
-  write_article(board, title, content, uid)
+  ip = request.remote_addr
+  write_article(board, title, content, uid, ip)
 
   return redirect('/'+board, code=302)
 
@@ -99,8 +112,8 @@ def board_read(board, no):
   if not article:
     return abort(404)
 
-  # Check permission on support board
-  if board == 'support':
+  # Check permission on qna board
+  if board == 'qna':
     if not article.get('pinned'):
       user_id = get_user_info(['id'], {'uid': article.get('uid')}).get('id')
       is_writer = (session.get('user_id') == user_id)

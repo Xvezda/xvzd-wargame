@@ -17,6 +17,7 @@ create table if not exists `xvzd_wargame`.`xvzd_users` (
     primary key (`uid`),
     unique (`id`)
 ) ENGINE=InnoDB;
+
 create table if not exists `xvzd_wargame`.`xvzd_notice` (
     `no` bigint not null auto_increment,
     `uid` bigint not null,
@@ -27,21 +28,26 @@ create table if not exists `xvzd_wargame`.`xvzd_notice` (
     `ip` varchar(64) not null,
     primary key (`no`)
 ) ENGINE=InnoDB;
-create table if not exists `xvzd_wargame`.`xvzd_support`
+
+create table if not exists `xvzd_wargame`.`xvzd_qna`
+like `xvzd_wargame`.`xvzd_notice`;
+
+create table if not exists `xvzd_wargame`.`xvzd_forum`
 like `xvzd_wargame`.`xvzd_notice`;
 
 /* Insert datas */
-insert into `xvzd_wargame`.`xvzd_users` (id, name, password)
+insert into `xvzd_wargame`.`xvzd_users` (id, name, password, ip)
 select * from (
     select 'admin',
            'Xvezda',
            'fa449eec0fcabe9829db83e3810798f3f5e7b832ba79682cd4e474ddd51f5677b'
-           '42a556cb8530d509f970b765e88b9052d77192d520acbf562178fd5aeb808ad'
+           '42a556cb8530d509f970b765e88b9052d77192d520acbf562178fd5aeb808ad',
+           '127.0.0.1'
 ) as tmp where not exists (
     select `id` from `xvzd_wargame`.`xvzd_users` where id='admin'
 );
 
-insert into `xvzd_wargame`.`xvzd_notice` (pinned, title, content, uid)
+insert into `xvzd_wargame`.`xvzd_notice` (pinned, title, content, uid, ip)
 select * from (
     select 1,
            '+++ THIS IS YOUR MAIN GOAL +++',
@@ -50,12 +56,14 @@ select * from (
            "&lt;your_id_here&gt;\" and contents with admin's login cookie flag."
            '<br><br>'
            '#JavaScript #XSS #CSRF #Bypass',
-           @adminUid
+           @adminUid,
+           '127.0.0.1'
 ) as tmp where not exists (
     select no from `xvzd_wargame`.`xvzd_notice`
 );
 
-insert into `xvzd_wargame`.`xvzd_support` (pinned, title, content, uid)
+/*
+insert into `xvzd_wargame`.`xvzd_support` (pinned, title, content, uid, ip)
 select * from (
     select 1,
            'HINT FOR YOU',
@@ -65,8 +73,10 @@ select * from (
            '<span class="text-muted">+Tip)<br>'
            'If you are not friendly with js, then use jQuery instead. :D'
            '</span>',
-           @adminUid
+           @adminUid,
+           '127.0.0.1'
 ) as tmp where not exists (
     select no from `xvzd_wargame`.`xvzd_support`
 );
+*/
 
