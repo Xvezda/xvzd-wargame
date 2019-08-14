@@ -3,7 +3,7 @@ MAINTAINER xvezda@naver.com
 
 RUN groupadd -r mysql && useradd -r -g mysql mysql
 
-ARG DEBIAN_FRONTEND=noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
 ARG DB_ROOT_PASSWORD
 RUN echo mysql-community-server \
         mysql-community-server/root-pass password "$DB_ROOT_PASSWORD" \
@@ -11,6 +11,8 @@ RUN echo mysql-community-server \
 RUN echo mysql-community-server \
         mysql-community-server/re-root-pass password "$DB_ROOT_PASSWORD" \
         | debconf-set-selections
+RUN wget http://repo.mysql.com/mysql-apt-config_0.8.9-1_all.deb
+RUN dpkg -i mysql-apt-config_0.8.9-1_all.deb
 
 # https://github.com/joyzoursky/docker-python-chromedriver
 # install google chrome
@@ -19,7 +21,7 @@ RUN sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable 
 
 RUN apt-get update -qq -y
 RUN apt-get install -qq -y apt-utils
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -qq -y mysql-server
+RUN apt-get install -qq -y mysql-server
 RUN apt-get install -qq -y redis-server
 RUN apt-get install -qq -y google-chrome-stable
 
