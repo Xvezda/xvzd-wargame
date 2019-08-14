@@ -2,10 +2,30 @@
 # Copyright (C) 2019 Xvezda <https://xvezda.com/>
 
 
+import sys
 import time
 from common.conf import *
 from model.base import select, select_all
 from model.base import insert
+
+
+def get_endpage(board, limit=10):
+  fields = ['count(*) as cnt']
+  result = select_all(XVZD_PREFIX__+board, fields)
+  return (int(result[0].get('cnt')) - 1) / limit + 1
+
+
+def get_list(board, page=1, limit=10):
+  page -= 1
+  if page < 0:
+    page = 1
+  order = 'desc'
+  page_offset = page * limit
+  if page_offset > sys.maxint:
+    page_offset = 0
+  fields = ['no', 'title', 'uid', 'regdate', 'pinned']
+  return select_all(XVZD_PREFIX__+board, fields,
+                    order=order, limit='%d, %d'%(page_offset, limit))
 
 
 def get_pinned(board):

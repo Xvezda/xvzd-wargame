@@ -5,6 +5,7 @@ from common.db import db_connect
 
 
 def select(table, fields, conds):
+  """Always return one row"""
   conn, cursor = db_connect()
   cursor.execute('select {} from {} where {}'.format(
     ', '.join(fields),
@@ -23,6 +24,7 @@ def select(table, fields, conds):
   return row
 
 def select_all(table, fields, conds={}, limit=10, order='asc'):
+  """Return all result"""
   conn, cursor = db_connect()
   cursor.execute('select {} from {} {} order by 1 {} limit {}'.format(
     ', '.join(fields), table,
@@ -35,7 +37,10 @@ def select_all(table, fields, conds={}, limit=10, order='asc'):
   cursor.close()
 
   result = result if result else []
-  rows = [{field: column for field, column in zip(fields, columns)}
+  rows = [{field.split(' as ')[-1]  # If field is alias
+           if isinstance(field.split(' as '), list)
+           else field: column
+           for field, column in zip(fields, columns)}
           for columns in result]
   return rows
 

@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
 
+{%- block title -%}Forum{%- endblock -%}
+
 {% block content %}
-{% include 'board_list.html' %}
+<div id="board" class="mt-4">
+  {% include 'board_list.html' %}
+</div>
 {% endblock %}
 

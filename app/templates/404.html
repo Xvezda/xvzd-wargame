@@ -4,22 +4,9 @@
 {{ error.name }}
 {%- endblock -%}
 
-{%- block styles -%}
-{{- super() -}}
-<style>
-#error {
-  margin: 50px 0;
-}
-#error img {
-  max-width: 100%;
-  height: auto;
-}
-</style>
-{%- endblock -%}
-
 {%- block content -%}
-<div id="error" class="text-center">
-  <img src="https://media.giphy.com/media/KxznAN2xM3KCfs3TH8/giphy.gif" onload="document.getElementById('msg').innerText='파일을 찾을 수 없살법!'">
+<div class="container text-center">
+  <img src="https://media.giphy.com/media/KxznAN2xM3KCfs3TH8/giphy.gif" onload="document.getElementById('msg').innerText='파일을 찾을 수 없살법!'" class="img-fluid" title="안녕하살법">
   <hr>
   <h1>Error 404</h1>
   <h2 id="msg">파일을 찾을 수 없습니다.</h2>

@@ -1,11 +1,28 @@
 {% extends 'base.html' %}
 
 {%- block title -%}
-{{ error }}
+{{ error.name }}
 {%- endblock -%}
 
 {%- block content -%}
-<div class="container">
-  <h1>{{ error.description|default('NO HACK! >:(', true)|safe }}</h1>
+<div class="container text-center">
+  <img src="https://i.imgur.com/qs6DwVF.gif" id="rand-img" class="img-fluid" title="FBI OPEN UP!">
+  <hr>
+  <h1>NO HACK! >:(</h1>
+  {%- if error.description -%}
+  <h2>{{ error.description|safe }}</h2>
+  {%- endif -%}
 </div>
+{%- endblock -%}
+
+{%- block scripts -%}
+<script>
+var random_meme = [
+  'https://i.imgur.com/iWqHzBm.gif',
+  'https://i.imgur.com/qs6DwVF.gif',
+  'https://i.imgur.com/Mfkcjx4.gif'
+];
+document.getElementById('rand-img').src = random_meme[Math.floor(Math.random()*random_meme.length)];
+</script>
+{{- super() -}}
 {%- endblock -%}

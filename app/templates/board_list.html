@@ -2,8 +2,8 @@
 <div class="container">
   <div class="col">
     <div class="row">
-      <h1>{{ current_page|title }}</h1>
-      <table id="{{ current_page }}" class="table">
+      <h1>{{ board|title }}</h1>
+      <table id="{{ board }}" class="table">
         <thead>
           <tr>
             <th scope="col">no</th>
@@ -14,32 +14,56 @@
         </thead>
         <tbody>
           <!-- pinned -->
-          {%- set pinned_articles = mboard.get_pinned(current_page) -%}
-          {% for article in pinned_articles %}
-          <tr>
+          {%- set pinned_articles = mboard.get_pinned(board) -%}
+          {%- for article in pinned_articles -%}
+          <tr class="pinned-row">
             <th scope="row"><span class="pinned" title="pinned"></span></th>
-            <td class="title"><a href="/{{ current_page }}/{{ article['no'] }}"><span class="text-danger font-weight-bold">{{ article['title'][:80] }}</span></a>
+            <td class="title"><a href="/{{ board }}/{{ article['no'] }}"><span class="text-danger font-weight-bold">{{ article['title'][:80] }}</span></a>
             {%- set user_info = maccount.get_user_info(['name'], {'uid': article['uid']}) -%}
             <td>{{ user_info['name'] }}</td>
             <td>{{ article['regdate'] }}</td>
           </tr>
-          {% endfor %}
+          {%- endfor -%}
           <!-- /pinned -->
-          {%- set articles = mboard.get_articles(current_page) -%}
-          {% for article in articles|rejectattr('pinned', 'equalto', 1) %}
+          {%- set articles = mboard.get_list(board, page) -%}
+          {%- for article in articles|rejectattr('pinned', 'equalto', 1) -%}
           <tr>
             <th scope="row">{{ article['no'] }}</th>
-            <td class="title"><a href="/{{ current_page }}/{{ article['no'] }}">{{ article['title'][:80] }}</a></td>
+            <td class="title"><a href="/{{ board }}/{{ article['no'] }}">{{ article['title'][:80] }}</a></td>
             {%- set user_info = maccount.get_user_info(['name'], {'uid': article['uid']}) -%}
             <td>{{ user_info['name'] }}</td>
             <td>{{ article['regdate'] }}</td>
           </tr>
-          {% endfor %}
+          {%- endfor -%}
         </tbody>
       </table>
     </div>
+    {%- set limit = 5 -%}
+    {%- set endpage = mboard.get_endpage(board) -%}
+    {%- set start = page // (limit+1) -%}
     <div class="row">
-      <a href="/{{ current_page }}/write" class="btn btn-secondary">Write</a>
+      <div class="col-md-6">
+        <nav aria-label="Page navigation example">
+          <ul class="pagination">
+            <li class="page-item">
+              <a class="page-link" href="/{{ board }}">First</a>
+            </li>
+            {%- for page_no in range(start*limit+1, (start+1)*limit+1) if page_no <= endpage -%}
+            <li class="page-item{% if page_no == page %} active{% endif %}">
+              <a class="page-link" href="/{{ board }}/page/{{ page_no }}">{{ page_no }}</a>
+            </li>
+            {%- endfor -%}
+            {%- if endpage > 1 -%}
+            <li class="page-item">
+              <a class="page-link" href="/{{ board }}/page/{{ endpage }}">End</a>
+            </li>
+            {%- endif -%}
+          </ul>
+        </nav>
+      </div>
+      <div class="col-md-6">
+        <a href="/{{ board }}/write" class="btn btn-info float-right">Write</a>
+      </div>
     </div>
   </div>
 </div>

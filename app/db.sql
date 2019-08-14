@@ -50,12 +50,11 @@ select * from (
 insert into `xvzd_wargame`.`xvzd_notice` (pinned, title, content, uid, ip)
 select * from (
     select 1,
-           '+++ THIS IS YOUR MAIN GOAL +++',
-           'Admin checks every submits on support board.<br>'
-           'Make admin to submit on notice board with title "Hacked by '
-           "&lt;your_id_here&gt;\" and contents with admin's login cookie flag."
-           '<br><br>'
-           '#JavaScript #XSS #CSRF #Bypass',
+           '게임 클리어 조건',
+           '관리자는 QnA 게시판이 올라올때마다 최신 게시글을 체크합니다.<br>'
+           '관리자에게 공지 게시판에 제목 "Hacked by &lt;여기에_아이디&gt;" '
+           '게시글을 올리게 만들면 1번째 플래그 조각과 2번째 문제 위치를 '
+           '알려드립니다.',
            @adminUid,
            '127.0.0.1'
 ) as tmp where not exists (
@@ -63,20 +62,39 @@ select * from (
 );
 
 /*
-insert into `xvzd_wargame`.`xvzd_support` (pinned, title, content, uid, ip)
+insert into `xvzd_wargame`.`xvzd_notice` (pinned, title, content, uid, ip)
 select * from (
     select 1,
-           'HINT FOR YOU',
-           '<a href="https://github.com/Xvezda/xvzd-wargame" target="_blank">'
-           'https://github.com/Xvezda/xvzd-wargame</a><br>'
-           'Here is all source code of this website :)<br><br>'
-           '<span class="text-muted">+Tip)<br>'
-           'If you are not friendly with js, then use jQuery instead. :D'
-           '</span>',
+           'Hacked by xvezda',
+           '=D',
            @adminUid,
            '127.0.0.1'
 ) as tmp where not exists (
-    select no from `xvzd_wargame`.`xvzd_support`
+    select no from `xvzd_wargame`.`xvzd_notice`
 );
-*/
+ */
+
+insert into `xvzd_wargame`.`xvzd_qna` (pinned, title, content, uid, ip)
+select * from (
+    select 1,
+           '힌트',
+           '<a href="https://github.com/Xvezda/xvzd-wargame" target="_blank">'
+           'https://github.com/Xvezda/xvzd-wargame</a>'
+           @adminUid,
+           '127.0.0.1'
+) as tmp where not exists (
+    select no from `xvzd_wargame`.`xvzd_qna`
+);
+
+insert into `xvzd_wargame`.`xvzd_forum` (pinned, title, content, uid, ip)
+select * from (
+    select 1,
+           '이곳은 자유롭게 글을 쓰실 수 있습니다.',
+           '<img src="https://i.imgur.com/FGRGdLo.jpg" width="400" height="345">'
+           '<p>주제가 없는 공개포럼 입니다.<br>아무주제나 편하게 써주세요 :D</p>',
+           @adminUid,
+           '127.0.0.1'
+) as tmp where not exists (
+    select no from `xvzd_wargame`.`xvzd_forum`
+);
 

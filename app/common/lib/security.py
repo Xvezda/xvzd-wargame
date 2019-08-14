@@ -40,7 +40,7 @@ def csrf_check_wrapper(original_func):
 
 def check_hack(*args):
   # Blacklist pattern
-  pattern = r'\.|\.\.|\$|\+|#|--|\\|`|_|\*|\||;|:|[box][\'"]|0[bx]|'  + \
+  pattern = r'\.|\$|\+|#|--|\\|`|_|\*|\||;|:|[box][\'"]|0[bx]|'  + \
             r'union|collation|proc|php|py|sys|style|import|select|'   + \
             r'script|src|embed|frame|object|esc|uri|eval|loc|limit|'  + \
             r'meta|input|form|html|head|body|button|table|glob|cast|' + \

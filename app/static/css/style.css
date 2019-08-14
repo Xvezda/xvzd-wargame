@@ -21,14 +21,51 @@ button:focus, button:active {
     background: url(/static/img/pin.png);
     background-size: 100%;
     display: inline-block;
-    width: 24px;
-    height: 24px;
+    width: 16px;
+    height: 16px;
 }
 
 .material-icons.md-18 { font-size: 18px; }
 .material-icons.md-24 { font-size: 24px; }
 .material-icons.md-36 { font-size: 36px; }
 .material-icons.md-48 { font-size: 48px; }
+
+/* Selection */
+::selection {
+  color: #fff;
+  background-color: #a00;
+}
+
+::-moz-selection {
+  color: #fff;
+  background: #a00;
+}
+
+/* Scroll bar */
+/* https://gist.github.com/devinrhode2/2573411 */
+/* Turn on custom 8px wide scrollbar */
+::-webkit-scrollbar {
+  width: 8px; /* 1px wider than Lion. */
+  /* This is more usable for users trying to click it. */
+  background-color: rgba(0,0,0,0);
+  -webkit-border-radius: 100px;
+}
+/* hover effect for both scrollbar area, and scrollbar 'thumb' */
+::-webkit-scrollbar:hover {
+  background-color: rgba(0, 0, 0, 0.09);
+}
+
+/* The scrollbar 'thumb' ...that marque oval shape in a scrollbar */
+::-webkit-scrollbar-thumb:vertical {
+  /* This is the EXACT color of Mac OS scrollbars. 
+     Yes, I pulled out digital color meter */
+  background: rgba(0,0,0,0.5);
+  -webkit-border-radius: 100px;
+}
+::-webkit-scrollbar-thumb:vertical:active {
+  background: rgba(0,0,0,0.61); /* Some darker color when you click it */
+  -webkit-border-radius: 100px;
+}
 
 /* Carousel */
 /* GLOBAL STYLES
