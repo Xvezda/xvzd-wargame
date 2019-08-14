@@ -11,8 +11,6 @@ RUN echo mysql-community-server \
 RUN echo mysql-community-server \
         mysql-community-server/re-root-pass password "$DB_ROOT_PASSWORD" \
         | debconf-set-selections
-RUN wget http://repo.mysql.com/mysql-apt-config_0.8.9-1_all.deb
-RUN dpkg -i mysql-apt-config_0.8.9-1_all.deb
 
 # https://github.com/joyzoursky/docker-python-chromedriver
 # install google chrome
