@@ -79,7 +79,7 @@ select * from (
     select 1,
            '힌트',
            '<a href="https://github.com/Xvezda/xvzd-wargame" target="_blank">'
-           'https://github.com/Xvezda/xvzd-wargame</a>'
+           'https://github.com/Xvezda/xvzd-wargame</a>',
            @adminUid,
            '127.0.0.1'
 ) as tmp where not exists (
