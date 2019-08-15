@@ -31,6 +31,7 @@ RUN unzip /tmp/chromedriver.zip chromedriver -d /usr/local/bin/
 # set display port to avoid crash
 ENV DISPLAY=:99
 
+COPY ./uwsgi.conf /etc/nginx/conf.d/
 COPY ./app /app
 
 # install selenium
