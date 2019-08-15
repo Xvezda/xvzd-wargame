@@ -27,9 +27,22 @@ app.config.update(
 )
 celery = make_celery(app)
 
+
 @celery.task()
 def run_bot():
   bot.check_article()
+
+
+# Prevent app from caching
+@app.after_request
+def add_header(response):
+  # No cache when html
+  if response.content_type[:9].lower() == 'text/html':
+    response.headers['Cache-Control'] = 'no-cache, no-store, ' + \
+      'must-revalidate, public, max-age=0'
+    response.headers['Expires'] = 0
+    response.headers['Pragma'] = 'no-cache'
+  return response
 
 
 if __name__ == "__main__":
