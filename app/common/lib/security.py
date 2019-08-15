@@ -40,11 +40,22 @@ def csrf_check_wrapper(original_func):
 
 def check_hack(*args):
   # Blacklist pattern
-  pattern = r'\.|\$|\+|#|--|\\|`|_|\*|\||;|:|[box][\'"]|0[bx]|'  + \
-            r'union|collation|proc|php|py|sys|style|import|select|'   + \
-            r'script|src|embed|frame|object|esc|uri|eval|loc|limit|'  + \
-            r'meta|input|form|html|head|body|button|table|glob|cast|' + \
-            r'schema|ord|mid|column|group|dump|var|dev|root|conv|base'
+  # NOTE: Can you bypass these? ;)
+  pattern = r'\.|\$|\+|#|--|\\|`|\'|"|_|\{|\}|\*|\||;|:|0[box]|'        + \
+            r'<[/\!\?%-]?(no)?(script|head|body|meta|form|style|php|'   + \
+            r'i?frame|link|object|(in|out)put|source|template|option|'  + \
+            r'canvas|svg|entity|time|doc|embed|applet|html|datalist)|'  + \
+            r'on(before|after)?((un)?load|error|focus|(hash)?change|'   + \
+            r'mouse|key|(on|off)line|page|re|se|message|storage|blur|'  + \
+            r'(dbl)?click|drag|scroll|wheel|context|invalid|submit|'    + \
+            r'copy|cut|paste|play|stall|suspend|time|volume)|auto|'     + \
+            r'collation|proc|union|select|sys|import|ord|mid|column|'   + \
+            r'insert|replace|alter|delete|update|sleep|benchmark|join|' + \
+            r'esc|uri|eval|loc|limit|glob|cast|schema|group|dump|cat|'  + \
+            r'dev|root|conv|base|sudo|(de)?comp|char|ascii|apache|rel|' + \
+            r'into|vbs|ecma|passwd|\.(p[ly]|sh|js(on)?|css|onion)|src|' + \
+            r'(class|id|style|role|type|target|(aria|data|attr)-\w+)='
+
   target = ''.join([arg for arg in args])
   return bool(re.findall(pattern, target, re.I))
 
