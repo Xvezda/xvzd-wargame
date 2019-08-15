@@ -21,6 +21,7 @@ app.register_blueprint(error_blueprint)
 app.register_blueprint(index_blueprint)
 
 #minify(app=app)
+
 app.config.update(
   CELERY_BROKER_URL='redis://127.0.0.1:6379',
   CELERY_RESULT_BACKEND='redis://127.0.0.1:6379'

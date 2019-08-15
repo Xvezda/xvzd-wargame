@@ -70,9 +70,9 @@ def board_write_check(board):
   title = request.form['title']
   # line break to br tag
   content = request.form['content'].replace('\n', '<br>')
-  # Let's limit length to 128
-  if board == 'qna' and len(content) > 0x80:
-    return abort(400, 'Max length of content limited to 128 bytes!')
+  # Let's limit length to 150
+  # if board == 'qna' and len(content) > 250:
+  #   return abort(400, 'Max length of content limited to 250 bytes!')
   uid = get_user_info(['uid'], {'id': session.get('user_id')}).get('uid')
 
   if security.check_hack(title, content):
@@ -117,6 +117,7 @@ def board_read(board, no):
         return abort(403, 'You are not admin!')
 
   return render_template('board_read.html', article=article, board=board)
+
 
 @board_blueprint.route('/notice', defaults={'board': 'notice', 'page': 1})
 @board_blueprint.route('/qna', defaults={'board': 'qna', 'page': 1})
