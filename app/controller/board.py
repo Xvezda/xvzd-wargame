@@ -66,7 +66,7 @@ def board_write_check(board):
       or not session.get('is_admin') or request.remote_addr != '127.0.0.1')):
     return abort(403, 'Not that easy LOL')
 
-  title = request.form['title']
+  title = request.form['title'].replace('<', '').replace('>', '')
   # line break to br tag
   content = request.form['content'].replace('\n', '<br>')
   # Let's limit length to 150

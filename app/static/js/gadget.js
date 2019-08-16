@@ -12,3 +12,6 @@ window.onload = function() {
     image.classList.add('img-fluid');
   });
 };
+
+console.log('%cCan I help you? ;)', 'font-size:72px;font-weight:bold;background:#000;color:#fff');
+

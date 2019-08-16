@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-celery -A app.celery worker &
 redis-server &
+celery -A app.celery worker &
 /usr/bin/mysqld_safe &
 sleep 5
 mysql -u root -ppassword < db.sql
