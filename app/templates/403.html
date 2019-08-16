@@ -1,11 +1,13 @@
 {% extends 'base.html' %}
 
 {%- block title -%}
-{{ error }}
+{{ error.name }}
 {%- endblock -%}
 
 {%- block content -%}
-<div class="container">
-  <h1>{{ error }}</h1>
+<div class="container text-center mt-5">
+  <img src="https://i.imgur.com/y7b044A.png" title="BEEEEEP" width="400" height="345" class="img-fluid">
+  <hr>
+  <h1>{{ error.description }}</h1>
 </div>
 {%- endblock -%}

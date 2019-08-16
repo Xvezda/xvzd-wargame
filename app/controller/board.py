@@ -3,30 +3,29 @@
 
 from sys import maxint
 from flask import Blueprint
-from flask import abort
 from flask import escape
 from flask import redirect
 from flask import render_template
 from flask import request
 from flask import session
 from flask import current_app
+from flask import abort
 
 from common.conf import *
+from common.func import giveme_flag
 from common.lib import handler
 from common.lib import security
 from model.board import get_article, write_article
 from model.account import get_user_info
-
-import model.board as mboard
-import model.account as maccount
+from model.message import send_message
 
 
 boards = XVZD_BOARDS__
 board_blueprint = Blueprint('board', __name__)
 
+import model
 context = {}
-context['mboard'] = mboard
-context['maccount'] = maccount
+context['model'] = model
 
 @board_blueprint.route('/about')
 @handler.db_error_wrapper
@@ -56,16 +55,16 @@ def board_write_check(board):
     return abort(400, '')
 
   if not session.get('is_logged'):
-    return abort(400, """
+    return render_template('redirect.html', script="""
       <script>
         alert('You are not logged in!');
         location = '/login';
       </script>
-    """)
+    """), 403
   # Notice board admin only
   if (board == 'notice' and (session.get('user_id') != 'admin'
       or not session.get('is_admin') or request.remote_addr != '127.0.0.1')):
-    return abort(400, 'Not that easy LOL')
+    return abort(403, 'Not that easy LOL')
 
   title = request.form['title']
   # line break to br tag
@@ -90,6 +89,22 @@ def board_write_check(board):
 
     result = run_bot.delay()
     #result.wait()
+
+  # Send flag if hacked
+  if (board == 'notice' and title[:10].lower() == 'hacked by '):
+    sender_uid = get_user_info(['uid'], {'id': 'admin'}).get('uid')
+
+    target_id = title.lower().split()[-1]
+    target_uid = get_user_info(['uid'], {'id': target_id}).get('uid')
+
+    if sender_uid and target_uid:
+      flag = giveme_flag()
+      html = '''
+        <img src="https://i.imgur.com/GYso5uF.jpg" class="img-fluid">
+        <br>
+        <p>%s</p>
+      ''' % (flag)
+      send_message(sender_uid, target_uid, 'HERE IS YOUR FLAG!', html, ip)
 
   return redirect('/'+board, code=302)
 

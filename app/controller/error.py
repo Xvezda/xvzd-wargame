@@ -8,7 +8,7 @@ from flask import render_template
 error_blueprint = Blueprint('error', __name__)
 
 @error_blueprint.app_errorhandler(400)
-def not_found(error):
+def bad_request(error):
   return render_template('400.html', error=error), 400
 
 @error_blueprint.app_errorhandler(403)

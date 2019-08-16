@@ -18,6 +18,18 @@ create table if not exists `xvzd_wargame`.`xvzd_users` (
     unique (`id`)
 ) ENGINE=InnoDB;
 
+create table if not exists `xvzd_wargame`.`xvzd_message` (
+    `no` bigint not null auto_increment,
+    `recv_uid` bigint not null,
+    `send_uid` bigint not null,
+    `readed` tinyint(1),
+    `title` varchar(128) not null,
+    `content` text not null,
+    `regdate` timestamp not null default current_timestamp,
+    `ip` varchar(64) not null,
+    primary key (`no`)
+) ENGINE=InnoDB;
+
 create table if not exists `xvzd_wargame`.`xvzd_notice` (
     `no` bigint not null auto_increment,
     `uid` bigint not null,
@@ -50,29 +62,22 @@ select * from (
 insert into `xvzd_wargame`.`xvzd_notice` (pinned, title, content, uid, ip)
 select * from (
     select 1,
+           '[이벤트] 호스팅 서비스 오픈 이벤트 (9/1 ~ 9/30)',
+           '이벤트 기간동안 가입하신 모든 분들께 30일간 Premium 패키지를 '
+           '무료체험 하실 수 있는 기회를 드립니다!<br>지금 바로 가입하세요!',
+           @adminUid,
+           '127.0.0.1' union
+    select 1,
            '게임 클리어 조건',
            '관리자는 QnA 게시판이 올라올때마다 최신 게시글을 체크합니다.<br>'
            '관리자에게 공지 게시판에 제목 "Hacked by &lt;여기에_아이디&gt;" '
-           '게시글을 올리게 만들면 1번째 플래그 조각과 2번째 문제 위치를 '
-           '알려드립니다.',
+           '(대소문자 구분x) 게시글을 올리게 만들면 개인쪽지로 플래그를 '
+           '드립니다.',
            @adminUid,
            '127.0.0.1'
 ) as tmp where not exists (
     select no from `xvzd_wargame`.`xvzd_notice`
 );
-
-/*
-insert into `xvzd_wargame`.`xvzd_notice` (pinned, title, content, uid, ip)
-select * from (
-    select 1,
-           'Hacked by xvezda',
-           '=D',
-           @adminUid,
-           '127.0.0.1'
-) as tmp where not exists (
-    select no from `xvzd_wargame`.`xvzd_notice`
-);
- */
 
 insert into `xvzd_wargame`.`xvzd_qna` (pinned, title, content, uid, ip)
 select * from (

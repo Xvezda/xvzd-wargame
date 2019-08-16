@@ -2,13 +2,13 @@
 # Copyright (C) 2019 Xvezda <https://xvezda.com/>
 
 from flask import Blueprint
-from flask import abort
 from flask import escape
 from flask import make_response
 from flask import redirect
 from flask import render_template
 from flask import request
 from flask import session
+from flask import abort
 
 from common.lib import handler
 from common.lib import security
@@ -62,9 +62,9 @@ def login_check():
     resp.set_cookie('flag', giveme_flag())
     return resp
   else:
-    return abort(400, """
+    return render_template('redirect.html', script="""
       <script>alert('ID, PW not match!');history.back();</script>
-    """)
+    """), 403
 
 
 @account_blueprint.route('/join')
@@ -88,12 +88,12 @@ def join_check():
   ref = request.referrer if request.referrer else '/'
   if not all(security.is_valid(r'^[a-zA-Z0-9_-]+$', item)
              for item in [user_id, user_name, user_pw]):
-    return abort(400, """
+    return render_template('redirect.html', script="""
       <script>
         alert('ID, NAME, PW should be alpha-numeric: [a-zA-Z0-9_-]');
         location.href = '%s';
       </script>
-    """ % (escape(ref)))
+    """ % (escape(ref))), 400
 
   user_pw = security.crypt(user_pw)
   ip = request.remote_addr
@@ -101,14 +101,14 @@ def join_check():
   try:
     insert_user(user_id, user_name, user_pw, ip)
   except:
-    return abort(400, """
+    return render_template('redirect.html', script="""
       <script>
         alert('ID Already exists!');
         location.href = '%s';
       </script>
-    """ % (escape(ref)))
+    """ % (escape(ref))), 403
 
-  return """
+  return render_template('redirect.html', script="""
     <script>alert('Welcome %s!');location.href='/login';</script>
-  """ % (escape(user_name))
+  """ % (escape(user_name)))
 

@@ -5,17 +5,17 @@
 {%- endblock -%}
 
 {%- block content -%}
-<div class="container text-center">
+<div class="container text-center mt-5">
   <img src="https://i.imgur.com/qs6DwVF.gif" id="rand-img" class="img-fluid" title="FBI OPEN UP!">
   <hr>
   <h1>NO HACK! >:(</h1>
   {%- if error.description -%}
-  <h2>{{ error.description|safe }}</h2>
+  <h2>{{ error.description }}</h2>
   {%- endif -%}
 </div>
 {%- endblock -%}
 
-{%- block scripts -%}
+{%- block scripts_tail -%}
 <script>
 var random_meme = [
   'https://i.imgur.com/iWqHzBm.gif',

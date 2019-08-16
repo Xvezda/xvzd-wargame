@@ -3,6 +3,8 @@ version: '2'
 services:
   xvzd:
     image: xvezda/xvzd-wargame:1.0b1
+    env_file:
+      - .env
     # image: xvzd:0.2
     container_name: xvzd
     # build:

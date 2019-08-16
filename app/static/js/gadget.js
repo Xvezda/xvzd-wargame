@@ -5,3 +5,10 @@ var hint = function() {
     + 'script, proc, sys, import, join, union, limit, root '
     + ' etc.. to any possible user input!!');
 };
+
+// Make images responsive
+window.onload = function() {
+  document.querySelectorAll('#board img').forEach(function(image) {
+    image.classList.add('img-fluid');
+  });
+};

@@ -12,7 +12,6 @@ def static_path():
 
 def giveme_flag():
   if session.get('is_admin', False) and request.remote_addr == '127.0.0.1':
-    return os.getenv('WARGAME_FLAG', 'NO_FLAG')
-  else:
-    return 'admin_has_real_flag_here'
+    return os.getenv('WARGAME_FLAG', 'ERROR_NO_FLAG_ASK_ADMIN')
+  return 'no cheating! please report admin about this bug.'
 

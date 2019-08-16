@@ -29,19 +29,21 @@ def get_list(board, page=1, limit=10):
 
 
 def get_pinned(board):
-  order = 'desc'
   fields = ['no', 'title', 'uid', 'regdate', 'pinned']
   return select_all(XVZD_PREFIX__+board, fields,
-                    conds={'pinned': 1}, order=order)
+                    conds={'pinned': 1})
+
 
 def get_articles(board):
   order = 'desc'
   fields = ['no', 'title', 'uid', 'regdate', 'pinned']
   return select_all(XVZD_PREFIX__+board, fields, order=order)
 
+
 def get_article(board, no):
   fields = ['no', 'title', 'content', 'uid', 'regdate', 'pinned']
   return select(XVZD_PREFIX__+board, fields, {'no': no})
+
 
 def write_article(board, title, content, uid, ip):
   insert(XVZD_PREFIX__+board,

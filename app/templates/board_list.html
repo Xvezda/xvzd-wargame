@@ -14,23 +14,23 @@
         </thead>
         <tbody>
           <!-- pinned -->
-          {%- set pinned_articles = mboard.get_pinned(board) -%}
+          {%- set pinned_articles = model.board.get_pinned(board) -%}
           {%- for article in pinned_articles -%}
           <tr class="pinned-row">
             <th scope="row"><span class="pinned" title="pinned"></span></th>
             <td class="title"><a href="/{{ board }}/{{ article['no'] }}"><span class="text-danger font-weight-bold">{{ article['title'][:80] }}</span></a>
-            {%- set user_info = maccount.get_user_info(['name'], {'uid': article['uid']}) -%}
+            {%- set user_info = model.account.get_user_info(['name'], {'uid': article['uid']}) -%}
             <td>{{ user_info['name'] }}</td>
             <td>{{ article['regdate'] }}</td>
           </tr>
           {%- endfor -%}
           <!-- /pinned -->
-          {%- set articles = mboard.get_list(board, page) -%}
+          {%- set articles = model.board.get_list(board, page) -%}
           {%- for article in articles|rejectattr('pinned', 'equalto', 1) -%}
           <tr>
             <th scope="row">{{ article['no'] }}</th>
             <td class="title"><a href="/{{ board }}/{{ article['no'] }}">{{ article['title'][:80] }}</a></td>
-            {%- set user_info = maccount.get_user_info(['name'], {'uid': article['uid']}) -%}
+            {%- set user_info = model.account.get_user_info(['name'], {'uid': article['uid']}) -%}
             <td>{{ user_info['name'] }}</td>
             <td>{{ article['regdate'] }}</td>
           </tr>
@@ -39,7 +39,7 @@
       </table>
     </div>
     {%- set limit = 5 -%}
-    {%- set endpage = mboard.get_endpage(board) -%}
+    {%- set endpage = model.board.get_endpage(board) -%}
     {%- set start = page // (limit+1) -%}
     <div class="row">
       <div class="col-md-6">
