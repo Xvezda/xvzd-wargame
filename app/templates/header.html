@@ -24,7 +24,7 @@
             <a class="nav-link" href="/message">
               {%- set unread_cnt = model.message.get_unread_message_count(uid) -%}
               {%- if  unread_cnt > 0 -%}
-              <span class="badge badge-pill badge-danger">{{ unread_cnt }}</span>
+              <span class="badge badge-pill badge-danger" title="New message">{{ unread_cnt }}</span>
               {%- endif -%}&nbsp;<strong>{{ session['user_name'] }}</strong>
             </a>
           </li>

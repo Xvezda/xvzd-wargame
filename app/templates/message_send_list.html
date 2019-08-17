@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{%- block title -%}
+보낸 쪽지함
+{%- endblock -%}
+
+{%- block content -%}
+<div class="container mt-4">
+  <div class="row">
+    <div class="col">
+      <h2 class="float-left">보낸 쪽지함</h2>
+      <div class="float-right btn-group">
+        <a href="/message" class="btn btn-dark">내 쪽지함</a>
+        <a href="/message/send/list" class="btn btn-dark disabled">보낸 쪽지</a>
+      </div>
+      <div class="clearfix"></div>
+      <table class="table mt-3">
+        <thead>
+          <tr>
+            <th scope="col">제목</th>
+            <th scope="col">받는 사람</th>
+            <th scope="col">날짜</th>
+            <th scope="col">수신 여부</th>
+          </tr>
+        </thead>
+        <tbody>
+          {%- set uid = model.account.get_user_info(['uid'], {'id': session['user_id']}).get('uid') -%}
+          {%- set messages = model.message.get_sended_message(uid, 1) -%}
+          {%- for message in messages -%}
+          <tr>
+            <td class="title">{{ message['title'] }}</td>
+            {%- set recv_name = model.account.get_user_info(['name'], {'uid': message['recv_uid']}).get('name') -%}
+            <td class="recv"><a href="/message/send?to=%40{{ recv_name }}">{{ recv_name }}</a></td>
+            <td class="date">{{ message['regdate'] }}</td>
+            {%- if not message['readed'] -%}
+            <td class="read">읽지 않음</td>
+            {%- else -%}
+            <td class="read">읽음</td>
+            {%- endif -%}
+          </tr>
+          {%- endfor -%}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{%- endblock -%}
+

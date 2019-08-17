@@ -112,9 +112,11 @@ def send():
   if not session.get('is_logged'):
     return abort(403, 'Login please')
   to = request.args.get('to')
-  if (not to or security.check_hack(to)
-      or not security.is_valid(r'^@?[a-zA-Z0-9_-]+$', to)):
+  if not to:
     to = ''
+  elif (security.check_hack(to) or len(to) > 128
+      or not security.is_valid(r'^@?[a-zA-Z0-9_-]+$', to)):
+    return abort(400, '')
 
   return render_template('message_send.html', to=to)
 
@@ -162,4 +164,12 @@ def send_check():
       location.href = '/message';
     </script>
    """)
+
+
+@message_blueprint.route('/message/send/list')
+def message_send_list():
+  if not session.get('is_logged'):
+    return abort(403, 'Login please')
+
+  return render_template('message_send_list.html')
 

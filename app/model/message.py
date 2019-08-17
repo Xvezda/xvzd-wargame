@@ -40,6 +40,19 @@ def send_message(send_uid, recv_uid, title, content, ip):
          ['recv_uid', 'send_uid', 'title', 'content', 'ip'],
          [recv_uid, send_uid, title, content, ip])
 
+def get_sended_message(uid, page, limit=10):
+  order = 'desc'
+  page -= 1
+  if page < 0:
+    page = 1
+  page_offset = page * limit
+  if page_offset > sys.maxint:
+    page_offset = 0
+  fields = ['no', 'recv_uid', 'send_uid', 'readed', 'title', 'content',
+            'regdate']
+  return select_all(XVZD_PREFIX__+'message', fields, {'send_uid': uid},
+                    order=order,limit='%d, %d'%(page_offset, limit))
+
 
 def mark_read_message(no):
   update(XVZD_PREFIX__+'message', {'readed': 1}, {'no': no})
