@@ -111,7 +111,12 @@ def message_list_get():
 def send():
   if not session.get('is_logged'):
     return abort(403, 'Login please')
-  return render_template('message_send.html')
+  to = request.args.get('to')
+  if (not to or security.check_hack(to)
+      or not security.is_valid(r'^@?[a-zA-Z0-9_-]+$', to)):
+    to = ''
+
+  return render_template('message_send.html', to=to)
 
 
 @message_blueprint.route('/message/send-check', methods=['GET', 'POST'])

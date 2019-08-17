@@ -7,7 +7,8 @@
 {% block content %}
 <div id="board" class="mt-4">
   <div class="container">
-    <h1>{{ board|title }}</h1>
+    <h1>{{ board|title }} <small>[<a href="#" onclick="hint()">?</a>]</small></h1>
+    <!-- Hint: https://github.com/Xvezda/xvzd-wargame/blob/master/app/common/lib/security.py#L43 -->
     <form action="/{{ board }}/write-check" method="POST">
       <input type="hidden" name="csrf_token" value="{{ session['csrf_token'] }}">
       <div class="form-group">

@@ -26,7 +26,7 @@ Message
       <tr>
         {%- set sender_name = model.account.get_user_info(['name'], {'uid': message['send_uid']}).get('name') -%}
         <td><a href="#" data-toggle="modal" data-target="#exampleModal" data-no="{{ message['no'] }}">{{ message['title'] }}{%- if not message['readed'] -%}&nbsp;<span class="badge badge-pill badge-danger">new</span>{%- endif -%}</a></td>
-        <td>{{ sender_name }}</td>
+        <td><a href="/message/send?to=%40{{ sender_name }}">{{ sender_name }}</a></td>
         <td>{{ message['regdate'] }}</td>
       </tr>
       {%- endfor -%}

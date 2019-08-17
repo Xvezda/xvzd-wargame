@@ -31,7 +31,7 @@
             <th scope="row">{{ article['no'] }}</th>
             <td class="title"><a href="/{{ board }}/{{ article['no'] }}">{{ article['title'][:80] }}</a></td>
             {%- set user_info = model.account.get_user_info(['name'], {'uid': article['uid']}) -%}
-            <td>{{ user_info['name'] }}</td>
+            <td><a href="/message/send?to=%40{{ user_info['name'] }}">{{ user_info['name'] }}</a></td>
             <td>{{ article['regdate'] }}</td>
           </tr>
           {%- endfor -%}
