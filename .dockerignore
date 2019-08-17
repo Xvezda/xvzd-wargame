@@ -2,4 +2,4 @@
 env/
 *.pyc
 *.rdb
-driver/
+__pycache__/
