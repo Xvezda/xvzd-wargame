@@ -1,10 +1,8 @@
-{%- set endpoint = request.endpoint if request.endpoint else 'index.home' -%}
-{%- set current_page = endpoint.split('.')[-1] -%}
 <!doctype html>
 <html>
   <head>
     {%- block meta -%}{% include 'meta.html' %}{%- endblock -%}
-    <title>{% block title -%}{{ current_page|title }}{%- endblock %} - Powered by Team ATKR</title>
+    <title>{% block title -%}ATKRHost{%- endblock %} - Powered by Team ATKR</title>
     {%- block styles -%}{% include 'styles.html' %}{%- endblock -%}
     {%- block scripts_head -%}{% include 'scripts_head.html' %}{%- endblock -%}
   </head>
