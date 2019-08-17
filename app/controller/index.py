@@ -21,7 +21,7 @@ def favicon():
 
 @index_blueprint.route('/')
 def main():
-  chrome_version = subprocess.check_output(['chromedriver', '--version'])
+  chrome_version = subprocess.check_output(['google-chrome', '--version'])
   return render_template('home.html', chrome_version=chrome_version)
 
 @index_blueprint.route('/home')
