@@ -5,14 +5,13 @@ from flask import Blueprint
 from flask import escape
 from flask import make_response
 from flask import redirect
-from flask import render_template
 from flask import request
 from flask import session
 from flask import abort
 
 from common.lib import handler
 from common.lib import security
-from common.func import giveme_flag
+from common.func import render_template
 from model.account import validate_login
 from model.account import insert_user
 from model.account import get_user_info
@@ -56,11 +55,7 @@ def login_check():
     if user_id == 'admin' and request.remote_addr == '127.0.0.1':
       session['is_admin'] = True
 
-    resp = make_response(redirect('/', code=302))
-
-    # NOTE: Admin will set flag here
-    resp.set_cookie('flag', giveme_flag())
-    return resp
+    return redirect('/', code=302)
   else:
     return render_template('redirect.html', script="""
       <script>alert('ID, PW not match!');history.back();</script>

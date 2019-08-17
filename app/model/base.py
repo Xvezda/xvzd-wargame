@@ -11,9 +11,10 @@ def select(table, fields, conds):
     ', '.join(fields),
     table,
     ' and '.join([
-      '{} = %s'.format(field) for field, _ in conds.iteritems()
+      '{} = %s'.format(field) if value else '{} is %s'.format(field)
+      for field, value in conds.iteritems()
     ])
-  ), *conds.values())
+  ), conds.values())
   result = cursor.fetchone()
   result = result if result else []
   cursor.close()
@@ -23,16 +24,18 @@ def select(table, fields, conds):
     row[field] = column
   return row
 
+
 def select_all(table, fields, conds={}, limit=10, order='asc'):
   """Return all result"""
   conn, cursor = db_connect()
   cursor.execute('select {} from {} {} order by 1 {} limit {}'.format(
     ', '.join(fields), table,
     'where ' + ' and '.join([
-      '{} = %s'.format(field) for field, _ in conds.iteritems()
+      '{} = %s'.format(field) if value else '{} is %s'.format(field)
+      for field, value in conds.iteritems()
     ]) if conds else '',
     order, limit
-  ), *conds.values())
+  ), conds.values())
   result = cursor.fetchall()
   cursor.close()
 
@@ -43,6 +46,22 @@ def select_all(table, fields, conds={}, limit=10, order='asc'):
            for field, column in zip(fields, columns)}
           for columns in result]
   return rows
+
+
+def update(table, set_values, conds={}):
+  conn, cursor = db_connect()
+  arguments = set_values.values() + conds.values()
+  cursor.execute('update {} set {} {}'.format(
+    table, ', '.join([
+      '{} = %s'.format(field) for field, _ in set_values.iteritems()
+    ]),
+    'where ' + ' and '.join([
+      '{} = %s'.format(field) for field, _ in conds.iteritems()
+    ]) if conds else ''
+  ), arguments)
+  conn.commit()
+  cursor.close()
+
 
 def insert(table, fields, values):
   conn, cursor = db_connect()

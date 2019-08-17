@@ -1,12 +1,14 @@
 #-*- coding: utf-8 -*-
 # Copyright (C) 2019 Xvezda <https://xvezda.com/>
 
+import subprocess
+
 from flask import Blueprint
-from flask import render_template
 from flask import redirect
 from flask import send_from_directory
 
 from common.func import static_path
+from common.func import render_template
 
 
 index_blueprint = Blueprint('index', __name__)
@@ -19,7 +21,8 @@ def favicon():
 
 @index_blueprint.route('/')
 def main():
-  return render_template('home.html')
+  chrome_version = subprocess.check_output(['chromedriver', '--version'])
+  return render_template('home.html', chrome_version=chrome_version)
 
 @index_blueprint.route('/home')
 def redir_home():

@@ -5,7 +5,6 @@ from sys import maxint
 from flask import Blueprint
 from flask import escape
 from flask import redirect
-from flask import render_template
 from flask import request
 from flask import session
 from flask import current_app
@@ -13,6 +12,7 @@ from flask import abort
 
 from common.conf import *
 from common.func import giveme_flag
+from common.func import render_template
 from common.lib import handler
 from common.lib import security
 from model.board import get_article, write_article
@@ -23,19 +23,15 @@ from model.message import send_message
 boards = XVZD_BOARDS__
 board_blueprint = Blueprint('board', __name__)
 
-import model
-context = {}
-context['model'] = model
-
 @board_blueprint.route('/about')
 @handler.db_error_wrapper
 def about():
-  return render_template('about.html', **context)
+  return render_template('about.html')
 
 
 @board_blueprint.route('/pricing')
 def pricing():
-  return render_template('pricing.html', **context)
+  return render_template('pricing.html')
 
 
 @board_blueprint.route('/<board>/write')
@@ -43,7 +39,7 @@ def pricing():
 def board_write(board):
   if board not in boards:
     return abort(400, '')
-  return render_template('board_write.html', board=board, **context)
+  return render_template('board_write.html', board=board)
 
 
 @board_blueprint.route('/<board>/write-check', methods=['GET', 'POST'])
@@ -145,5 +141,5 @@ def board_list(board, page):
       or page > maxint):
     return abort(400, '')
 
-  return render_template(board+'.html', board=board, page=page, **context)
+  return render_template(board+'.html', board=board, page=page)
 

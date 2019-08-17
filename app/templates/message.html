@@ -5,7 +5,7 @@ Message
 {%- endblock -%}
 
 {%- block content -%}
-<div class="container mt-4">
+<div id="message" class="container mt-4">
   <h2>쪽지함</h2>
   <table class="table mt-3">
     <thead>
@@ -25,7 +25,7 @@ Message
       {%- for message in messages -%}
       <tr>
         {%- set sender_name = model.account.get_user_info(['name'], {'uid': message['send_uid']}).get('name') -%}
-        <td><a href="#" data-toggle="modal" data-target="#exampleModal" data-no="{{ message['no'] }}">{{ message['title'] }}</a></td>
+        <td><a href="#" data-toggle="modal" data-target="#exampleModal" data-no="{{ message['no'] }}">{{ message['title'] }}{%- if not message['readed'] -%}&nbsp;<span class="badge badge-pill badge-danger">new</span>{%- endif -%}</a></td>
         <td>{{ sender_name }}</td>
         <td>{{ message['regdate'] }}</td>
       </tr>
@@ -60,24 +60,49 @@ Message
 
 {%- block scripts_tail -%}
 <script>
-  $('#exampleModal').on('show.bs.modal', function (event) {
-    var target = $(event.relatedTarget);
-    var no = target.data('no');
-    var modal = $(this);
-    $.ajax({
-      url: '/message/get-ajax',
-      method: 'POST',
-      data: {
-        no: no
-      },
-    }).done(function(result) {
-      try {
-        data = JSON.parse(result).data;
-      } catch (e) { return; }
-      modal.find('.modal-title').text(data.message.title);
-      modal.find('.modal-body p').html(data.message.content);
-      console.log(data.message);
+  $(document).ready(function () {
+    var current_page = 1;
+    $('#exampleModal').on('show.bs.modal', function (event) {
+      var target = $(event.relatedTarget);
+      var no = target.data('no');
+      var modal = $(this);
+      $.ajax({
+        url: '/message/get-ajax',
+        method: 'POST',
+        data: {
+          no: no
+        },
+      }).done(function(result) {
+        try {
+          data = JSON.parse(result).data;
+        } catch (e) { return; }
+        modal.find('.modal-title').text(data.message.title);
+        modal.find('.modal-body p').html(data.message.content);
+      });
     });
+
+    $('#message a[data-no]').on('click', function(event) {
+      var target = event.target;
+      var html = target.innerHTML;
+      // Remove new badge
+      target.innerHTML = html.replace(/<span.+?>.+?<\/span>/g,'');
+    });
+
+    function getMessageList(page) {
+      $.ajax({
+        url: '/message/list/get-ajax',
+        method: 'POST',
+        data: {
+          page: page
+        },
+      }).done(function(result) {
+      });
+    }
+
+    function getNextMessageList() {
+      ++current_page;
+      getMessageList(current_page);
+    }
   });
 </script>
 {%- endblock -%}

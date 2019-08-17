@@ -5,6 +5,7 @@ import os
 from flask import session
 from flask import request
 from flask import current_app
+from flask import render_template as flask_render_template
 
 
 def static_path():
@@ -15,3 +16,6 @@ def giveme_flag():
     return os.getenv('WARGAME_FLAG', 'ERROR_NO_FLAG_ASK_ADMIN')
   return 'no cheating! please report admin about this bug.'
 
+def render_template(*args, **kwargs):
+  import model
+  return flask_render_template(*args, model=model, **kwargs)
