@@ -42,6 +42,9 @@ def add_header(response):
       'must-revalidate, public, max-age=0'
     response.headers['Expires'] = 0
     response.headers['Pragma'] = 'no-cache'
+    # XSS prevention
+    response.headers['X-Frame-Options'] = 'deny'
+    response.headers['X-XSS-Protection'] = '1; mode=block'
   return response
 
 
