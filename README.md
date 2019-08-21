@@ -1,7 +1,10 @@
 BoB 8th Vulnerability Analysis Track CTF
 ========================================
 
-1. Install docker, docker-compose, git. (Skip if already installed)
+How to run
+----------
+
+1. Install docker, docker-compose and git.
 ```sh
 sudo apt-get update
 sudo apt-get install docker.io docker-compose git
@@ -26,13 +29,11 @@ sudo docker-compose up -d
 Known Issue
 -----------
 Error - Docker compose version is too low.
-
 ```
-upported config option for services service: ...
+Unsupported config option for services service: '...'
 ```
 
 Solve
-
 ```sh
 sudo docker-compose -f docker-compose-1.2.0.yml up -d
 ```
