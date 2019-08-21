@@ -13,7 +13,12 @@ git clone https://github.com/Xvezda/xvzd-wargame.git wargame
 cd wargame
 ```
 
-3. Run docker compose
+3. Generate wargame flag
+```sh
+echo WARGAME_FLAG=FLAG{your_flag_here} > .env
+```
+
+4. Run docker compose
 ```sh
 sudo docker-compose up -d
 ```
