@@ -1,0 +1,8 @@
+
+xvzd:
+  image: xvezda/xvzd-wargame:1.0
+  ports:
+    - "80:80"
+  volumes:
+    - ./app:/app
+

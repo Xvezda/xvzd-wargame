@@ -17,3 +17,12 @@ cd wargame
 ```sh
 sudo docker-compose up -d
 ```
+
+Known Issue
+-----------
+Error - Docker compose version is too low.
+`upported config option for services service: ...`
+
+Solve
+`sudo docker-compose -f docker-compose-1.2.0.yml up -d`
+
