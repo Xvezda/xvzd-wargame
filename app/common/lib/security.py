@@ -50,7 +50,7 @@ def check_hack(*args):
     return True
 
   # Blacklist pattern
-  pattern = r'@|\.[^\s]|\$|\+|#|--|\\|`|\'|"|_|\{|\}|\*|\||;|:|0[box]|' + \
+  pattern = r'@|[^\w\.]\.|\$|\+|#|--\s|\\|`|\'|"|_|\{|\}|\*|\||;|:|' + \
             r'<[/\!\?%\[-]?(no)?(script|head|body|meta|form|style|php|' + \
             r'i?frame|link|object|(in|out)put|source|template|option|'  + \
             r'canvas|svg|entity|time|doc|embed|applet|html|datalist)|'  + \
@@ -63,7 +63,7 @@ def check_hack(*args):
             r'esc|uri|eval|loc|limit|glob|cast|schema|group|dump|cat|'  + \
             r'dev|root|conv|base|sudo|(de)?comp|char|ascii|apache|rel|' + \
             r'chrome|console|debug|view|source|nginx|host|referr?er|'   + \
-            r'into|vbs|ecma|passwd|\.(p[ly]|sh|js(on)?|css|onion|exe)|' + \
+            r'into|vbs|ecma|passwd|\.(p[ly]|sh|js(on)?|css|exe)|0[bx]|' + \
             r'(class|id|style|role|type|target|(aria|data|attr)-\w+)='
 
   return bool(re.findall(pattern, target, re.I))
@@ -73,7 +73,8 @@ def purify(string):
   string = string.replace('&', '&amp;')
   string = string.replace('\n', '<br>')
   string = string.replace('  ', ' &nbsp;')
-  return re.sub(r'\.\s+', '.&nbsp;', string, re.M)
+  string = re.sub(r'\.([^\s])', r'.<wbr>\1', string, re.M)
+  return re.sub(r'\.\s+', r'.&nbsp;', string, re.M)
 
 
 def is_valid(pattern, target):

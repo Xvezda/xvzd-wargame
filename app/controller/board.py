@@ -63,6 +63,8 @@ def board_write_check(board):
     return abort(403, 'Not that easy LOL')
 
   title = request.form['title'].replace('<', '').replace('>', '')
+  content = request.form['content']
+
   uid = get_user_info(['uid'], {'id': session.get('user_id')}).get('uid')
 
   # Abort if input contains malicious payloads
