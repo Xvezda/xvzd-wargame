@@ -102,10 +102,11 @@ select * from (
            '127.0.0.1' union
     select 1,
            'JUST ANOTHER HINT',
-           '<a href="https://github.com/Xvezda/xvzd-wargame" target="_blank">'
-           'https://github.com/Xvezda/xvzd-wargame</a><br><br>'
-           '<p class="text-muted">There is another hidden hint.</p>'
-           '<!-- Hint: CSRF, XSS, HTML5, Bypass, ROP Gadget -->',
+           '<a href="https://github.com/Xvezda/xvzd-wargame/blob/master/'
+           'app/common/lib/security.py" target="_blank">'
+           'Source code</a><br><br>'
+           '<p class="text-muted">There is another hidden hint here.</p>'
+           '<!-- Hint: CSRF, XSS, HTML5, Bypass, Gadget -->',
            @adminUid,
            now(),
            '127.0.0.1' union
