@@ -41,26 +41,39 @@ def csrf_check_wrapper(original_func):
 
 
 def check_hack(*args):
-  # Blacklist pattern
   # NOTE: Can you bypass these? ;)
-  pattern = r'\.|\$|\+|#|--|\\|`|\'|"|_|\{|\}|\*|\||;|:|0[box]|'        + \
-            r'<[/\!\?%-]?(no)?(script|head|body|meta|form|style|php|'   + \
+  limit = 50
+  target = ''.join([arg for arg in args])
+
+  # Check abnormal numbers of special chracters
+  if any(target.count(c) >= limit for c in '[]()!?.~%^&='):
+    return True
+
+  # Blacklist pattern
+  pattern = r'@|\.[^\s]|\$|\+|#|--|\\|`|\'|"|_|\{|\}|\*|\||;|:|0[box]|' + \
+            r'<[/\!\?%\[-]?(no)?(script|head|body|meta|form|style|php|' + \
             r'i?frame|link|object|(in|out)put|source|template|option|'  + \
             r'canvas|svg|entity|time|doc|embed|applet|html|datalist)|'  + \
             r'on(before|after)?((un)?load|error|focus|(hash)?change|'   + \
             r'mouse|key|(on|off)line|page|re|se|message|storage|blur|'  + \
             r'(dbl)?click|drag|scroll|wheel|context|invalid|submit|'    + \
-            r'copy|cut|paste|play|stall|suspend|time|volume)|auto|'     + \
+            r'copy|cut|paste|play|stall|suspend|time|volume)|auto|src|' + \
             r'collation|proc|union|select|sys|import|ord|mid|column|'   + \
             r'insert|replace|alter|delete|update|sleep|benchmark|join|' + \
             r'esc|uri|eval|loc|limit|glob|cast|schema|group|dump|cat|'  + \
             r'dev|root|conv|base|sudo|(de)?comp|char|ascii|apache|rel|' + \
             r'chrome|console|debug|view|source|nginx|host|referr?er|'   + \
-            r'into|vbs|ecma|passwd|\.(p[ly]|sh|js(on)?|css|onion)|src|' + \
+            r'into|vbs|ecma|passwd|\.(p[ly]|sh|js(on)?|css|onion|exe)|' + \
             r'(class|id|style|role|type|target|(aria|data|attr)-\w+)='
 
-  target = ''.join([arg for arg in args])
   return bool(re.findall(pattern, target, re.I))
+
+
+def purify(string):
+  string = string.replace('&', '&amp;')
+  string = string.replace('\n', '<br>')
+  string = string.replace('  ', ' &nbsp;')
+  return re.sub(r'\.\s+', '.&nbsp;', string, re.M)
 
 
 def is_valid(pattern, target):

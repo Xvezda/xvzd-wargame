@@ -63,15 +63,12 @@ def board_write_check(board):
     return abort(403, 'Not that easy LOL')
 
   title = request.form['title'].replace('<', '').replace('>', '')
-  # line break to br tag
-  content = request.form['content'].replace('\n', '<br>')
-  # Let's limit length to 150
-  # if board == 'qna' and len(content) > 250:
-  #   return abort(400, 'Max length of content limited to 250 bytes!')
   uid = get_user_info(['uid'], {'id': session.get('user_id')}).get('uid')
 
+  # Abort if input contains malicious payloads
   if security.check_hack(title, content):
     return abort(400, '')
+  content = security.purify(content)
 
   if not uid:
     return abort(400, 'What the hell??')

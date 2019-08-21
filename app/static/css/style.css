@@ -1,5 +1,8 @@
 /* Copyright (C) 2019 Xvezda <https://xvezda.com/> */
 body {
+    font-family: "Avenir LT Std", 'Noto Sans KR', "Apple SD Gothic Neo",
+    "Malgun Gothic", "맑은 고딕", "Nanum Gothic", Dotum, '돋움',
+    Helvetica, sans-serif;
     overflow-x: hidden;
 }
 
