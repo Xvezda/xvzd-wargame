@@ -50,10 +50,11 @@ def check_hack(*args):
     return True
 
   # Blacklist pattern
-  pattern = r'@|[^\w\.]\.|\$|\+|#|--\s|\\|`|\'|"|_|\{|\}|\*|\||;|:|' + \
+  pattern = r'@|[^\w\.]\.|\$|\+|#|-|\\|`|\'|"|_|\{|\}|\*|\||;|:|\^|' + \
             r'<[/\!\?%\[-]?(no)?(script|head|body|meta|form|style|php|' + \
             r'i?frame|link|object|(in|out)put|source|template|option|'  + \
-            r'canvas|svg|entity|time|doc|embed|applet|html|datalist)|'  + \
+            r'canvas|svg|entity|time|doc|embed|applet|html|datalist|'   + \
+            r'button|keygen|(is)?index|text|map|marquee|xmp|progress)|' + \
             r'on(before|after)?((un)?load|error|focus|(hash)?change|'   + \
             r'mouse|key|(on|off)line|page|re|se|message|storage|blur|'  + \
             r'(dbl)?click|drag|scroll|wheel|context|invalid|submit|'    + \
@@ -64,6 +65,7 @@ def check_hack(*args):
             r'dev|root|conv|base|sudo|(de)?comp|char|ascii|apache|rel|' + \
             r'chrome|console|debug|view|source|nginx|host|referr?er|'   + \
             r'into|vbs|ecma|passwd|\.(p[ly]|sh|js(on)?|css|exe)|0[bx]|' + \
+            r'regexp|sub|new|string|xml|jquery|' + \
             r'(class|id|style|role|type|target|(aria|data|attr)-\w+)='
 
   return bool(re.findall(pattern, target, re.I))
