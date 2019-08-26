@@ -51,9 +51,9 @@ def check_hack(*args):
 
   # Blacklist pattern
   pattern = r'@|[^\w\.]\.|\$|\+|#|-|\\|`|\'|"|_|\{|\}|\*|\||;|\^|'        + \
-            r'<[/\!\?%\[-]?(no)?(script|head|body|meta|form|style|php|'   + \
+            r'<[/\!\?%\[-]?(meta|form|style|php|pre|bgsound|commmand|'    + \
             r'i?frame|link|object|(in|out)put|encode|template|option|'    + \
-            r'canvas|svg|entity|time|doc|embed|applet|html|datalist|'     + \
+            r'canvas|svg|entity|time|embed|applet|html|datalist|comment|' + \
             r'button|keygen|(is)?index|text|map|marquee|xmp|progress)|'   + \
             r'on(before|after)?((un)?load|error|focus|(hash)?change|'     + \
             r'mouse|key|(on|off)line|page|re|se|message|storage|blur|'    + \
@@ -67,6 +67,7 @@ def check_hack(*args):
             r'into|vbs|ecma|passwd|\.(p[ly]|sh|js(on)?|css|exe)|0[bx]|'   + \
             r'regexp|sub|new|xml|jquery|curl|ssh|phar|ftp|gopher|smtp|'   + \
             r'write|append|prepend|inner|outer|cookie|origin|java|const|' + \
+            r'doc|head|body|window|cwd|history|atob|unescape|decode|' + \
             r'(class|id|style|role|type|target|(aria|data|attr)-\w+)='
 
   return bool(re.findall(pattern, target, re.I))
