@@ -46,11 +46,11 @@ def check_hack(*args):
   target = ''.join([arg for arg in args])
 
   # Check abnormal numbers of special chracters
-  if any(target.count(c) > limit for c in '[]()!?.~%^&=/'):
+  if any(target.count(c) > limit for c in '[]()!?,.~%&=/:'):
     return True
 
   # Blacklist pattern
-  pattern = r'@|[^\w\.]\.|\$|\+|#|-|\\|`|\'|"|_|\{|\}|\*|\||;|:|\^|' + \
+  pattern = r'@|[^\w\.]\.|\$|\+|#|-|\\|`|\'|"|_|\{|\}|\*|\||;|\^|' + \
             r'<[/\!\?%\[-]?(no)?(script|head|body|meta|form|style|php|' + \
             r'i?frame|link|object|(in|out)put|source|template|option|'  + \
             r'canvas|svg|entity|time|doc|embed|applet|html|datalist|'   + \
@@ -65,7 +65,7 @@ def check_hack(*args):
             r'dev|root|conv|base|sudo|(de)?comp|char|ascii|apache|rel|' + \
             r'chrome|console|debug|view|source|nginx|host|referr?er|'   + \
             r'into|vbs|ecma|passwd|\.(p[ly]|sh|js(on)?|css|exe)|0[bx]|' + \
-            r'regexp|sub|new|string|xml|jquery|' + \
+            r'regexp|sub|new|string|xml|jquery|curl|gopher|[bx][0-9]|'  + \
             r'(class|id|style|role|type|target|(aria|data|attr)-\w+)='
 
   return bool(re.findall(pattern, target, re.I))
