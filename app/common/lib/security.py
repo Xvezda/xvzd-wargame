@@ -67,7 +67,7 @@ def check_hack(*args):
             r'into|vbs|ecma|passwd|\.(p[ly]|sh|js(on)?|css|exe)|0[bx]|'   + \
             r'regexp|sub|new|xml|jquery|curl|ssh|phar|ftp|gopher|smtp|'   + \
             r'write|append|prepend|inner|outer|cookie|origin|java|const|' + \
-            r'doc|head|body|window|cwd|history|atob|unescape|decode|' + \
+            r'doc|head|body|window|reverse|history|atob|unescape|decode|' + \
             r'(class|id|style|role|type|target|(aria|data|attr)-\w+)='
 
   return bool(re.findall(pattern, target, re.I))
