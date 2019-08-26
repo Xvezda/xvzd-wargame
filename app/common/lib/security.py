@@ -42,11 +42,11 @@ def csrf_check_wrapper(original_func):
 
 def check_hack(*args):
   # NOTE: Can you bypass these? ;)
-  limit = 50
+  limit = 25
   target = ''.join([arg for arg in args])
 
   # Check abnormal numbers of special chracters
-  if any(target.count(c) >= limit for c in '[]()!?.~%^&='):
+  if any(target.count(c) > limit for c in '[]()!?.~%^&='):
     return True
 
   # Blacklist pattern
