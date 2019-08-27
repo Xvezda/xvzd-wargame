@@ -4,6 +4,8 @@
 <div class="container">
   <div class="row">
     <div class="col-md-4 offset-md-4 mt-4">
+      <div class="alert alert-danger alert-dismissible fade show" role="alert">[주의] 본 사이트는 안전하지 않습니다. 개인정보, 주로 사용하는 비밀번호 등을 입력하지 마세요
+      </div>
       <h1 class="mb-3">Join</h1>
       <form id="join" action="/join-check" method="POST">
         <input type="hidden" name="csrf_token" value="{{ session['csrf_token'] }}">
