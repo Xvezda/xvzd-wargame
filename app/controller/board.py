@@ -67,6 +67,10 @@ def board_write_check(board):
 
   uid = get_user_info(['uid'], {'id': session.get('user_id')}).get('uid')
 
+  # Limit qna board content length
+  if board == 'qna' and len(content) > 180:
+    return abort(400, 'Contents length limited to 180 characters!')
+
   # Abort if input contains malicious payloads
   if security.check_hack(title, content):
     return abort(400, '')
