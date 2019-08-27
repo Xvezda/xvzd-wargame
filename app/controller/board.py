@@ -130,6 +130,10 @@ def board_read(board, no):
           and not is_writer):
         return abort(403, 'You are not admin!')
 
+  # Admin cannot see forum board articles
+  if board == 'forum' and session.get('is_admin'):
+    article['content'] = 'CANNOT LOAD CONTENT BY SECURITY ISSUE'
+
   return render_template('board_read.html', article=article, board=board)
 
 
