@@ -155,6 +155,9 @@ def send_check():
   sender_uid = sender_result.get('uid')
   ip = request.remote_addr
 
+  if sender_uid == target_uid:
+    return abort(400, 'You cannot send a message to yourself!')
+
   send_message(sender_uid, target_uid, title, content, ip)
 
   return render_template('redirect.html', script="""
