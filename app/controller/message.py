@@ -114,8 +114,7 @@ def send():
   to = request.args.get('to')
   if not to:
     to = ''
-  elif (security.check_hack(to) or len(to) > 128
-      or not security.is_valid(r'^@?[a-zA-Z0-9_-]+$', to)):
+  elif (len(to) > 128 or not security.is_valid(r'^@?[a-zA-Z0-9_-]+$', to)):
     return abort(400, '')
 
   return render_template('message_send.html', to=to)
