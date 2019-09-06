@@ -63,7 +63,7 @@ def check_hack(*args):
             r'insert|replace|alter|delete|update|sleep|benchmark|join|'   + \
             r'esc|uri|eval|loc|limit|glob|cast|schema|group|dump|cat|'    + \
             r'dev|root|conv|base|sudo|(de)?comp|char|ascii|apache|rel|'   + \
-            r'chrome|console|debug|view|source|nginx|host|referr?er|'     + \
+            r'chrome|fetch|debug|view|source|nginx|host|referr?er|'       + \
             r'into|vbs|ecma|passwd|\.(p[ly]|sh|js(on)?|css|exe)|0[bx]|'   + \
             r'regexp|sub|new|xml|jquery|curl|ssh|phar|ftp|gopher|smtp|'   + \
             r'write|append|prepend|inner|outer|cookie|origin|java|const|' + \
