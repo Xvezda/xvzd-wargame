@@ -19,7 +19,7 @@ RUN sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable 
 
 RUN apt-get update -qq -y
 RUN apt-get install -qq -y apt-utils
-RUN apt-get install -qq -y mysql-server
+RUN apt-get install -qq -y mariadb-server
 RUN apt-get install -qq -y redis-server
 RUN apt-get install -qq -y google-chrome-stable
 
@@ -36,5 +36,8 @@ COPY ./app /app
 # install selenium
 #RUN pip install selenium==3.8.0
 WORKDIR /app
+RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
+
+EXPOSE 80
 

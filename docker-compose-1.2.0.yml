@@ -1,6 +1,6 @@
 
 xvzd:
-  image: xvezda/xvzd-wargame:1.0
+  image: xvezda/xvzd-wargame:1.1
   env_file:
     - .env
   ports:
