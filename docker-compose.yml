@@ -2,7 +2,7 @@ version: '2'
 
 services:
   xvzd:
-    image: xvezda/xvzd-wargame:1.2
+    image: xvezda/xvzd-wargame:1.3
     env_file:
       - .env
     # image: xvzd:0.2
